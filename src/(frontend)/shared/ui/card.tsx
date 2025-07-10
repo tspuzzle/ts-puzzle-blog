@@ -1,4 +1,4 @@
-import { cn } from '@/utilities/ui'
+import { cn } from '@/(frontend)/shared/lib/cn'
 import * as React from 'react'
 
 const Card: React.FC<

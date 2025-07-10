@@ -1,4 +1,4 @@
-import { cn } from '@/utilities/ui'
+import { cn } from '@/(frontend)/shared/lib/cn'
 import React from 'react'
 
 import { Card, CardPostData } from '@/components/Card'
