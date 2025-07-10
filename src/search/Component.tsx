@@ -1,6 +1,6 @@
 'use client'
-import { Input } from '@/(frontend)/shared/ui/input'
-import { Label } from '@/(frontend)/shared/ui/label'
+import { Input } from '@/_frontend/shared/ui/input'
+import { Label } from '@/_frontend/shared/ui/label'
 import React, { useState, useEffect } from 'react'
 import { useDebounce } from '@/utilities/useDebounce'
 import { useRouter } from 'next/navigation'

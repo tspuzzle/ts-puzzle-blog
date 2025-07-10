@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 
-import { Button } from '@/(frontend)/shared/ui/button'
+import { Button } from '@/_frontend/shared/ui/button'
 
 export default function NotFound() {
   return (

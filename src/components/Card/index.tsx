@@ -1,5 +1,5 @@
 'use client'
-import { cn } from '@/(frontend)/shared/lib/cn'
+import { cn } from '@/_frontend/shared/lib/cn'
 import useClickableCard from '@/utilities/useClickableCard'
 import Link from 'next/link'
 import React, { Fragment } from 'react'

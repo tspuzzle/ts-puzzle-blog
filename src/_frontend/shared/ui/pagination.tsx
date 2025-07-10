@@ -1,7 +1,7 @@
-import type { ButtonProps } from '@/(frontend)/shared/ui/button'
+import type { ButtonProps } from '@/_frontend/shared/ui/button'
 
-import { buttonVariants } from '@/(frontend)/shared/ui/button'
-import { cn } from '@/(frontend)/shared/lib/cn'
+import { buttonVariants } from '@/_frontend/shared/ui/button'
+import { cn } from '@/_frontend/shared/lib/cn'
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react'
 import * as React from 'react'
 

@@ -6,7 +6,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/(frontend)/shared/ui/select'
+} from '@/_frontend/shared/ui/select'
 import React, { useState } from 'react'
 
 import type { Theme } from './types'

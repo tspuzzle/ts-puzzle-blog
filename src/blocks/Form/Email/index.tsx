@@ -1,8 +1,8 @@
 import type { EmailField } from '@payloadcms/plugin-form-builder/types'
 import type { FieldErrorsImpl, FieldValues, UseFormRegister } from 'react-hook-form'
 
-import { Input } from '@/(frontend)/shared/ui/input'
-import { Label } from '@/(frontend)/shared/ui/label'
+import { Input } from '@/_frontend/shared/ui/input'
+import { Label } from '@/_frontend/shared/ui/label'
 import React from 'react'
 
 import { Error } from '../Error'

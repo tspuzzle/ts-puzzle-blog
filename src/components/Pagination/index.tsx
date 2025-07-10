@@ -7,8 +7,8 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from '@/(frontend)/shared/ui/pagination'
-import { cn } from '@/(frontend)/shared/lib/cn'
+} from '@/_frontend/shared/ui/pagination'
+import { cn } from '@/_frontend/shared/lib/cn'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 

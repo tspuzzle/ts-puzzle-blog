@@ -1,4 +1,4 @@
-import { cn } from '@/(frontend)/shared/lib/cn'
+import { cn } from '@/_frontend/shared/lib/cn'
 import * as React from 'react'
 
 const Textarea: React.FC<

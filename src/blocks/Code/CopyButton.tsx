@@ -1,5 +1,5 @@
 'use client'
-import { Button } from '@/(frontend)/shared/ui/button'
+import { Button } from '@/_frontend/shared/ui/button'
 import { CopyIcon } from '@payloadcms/ui/icons/Copy'
 import { useState } from 'react'
 
