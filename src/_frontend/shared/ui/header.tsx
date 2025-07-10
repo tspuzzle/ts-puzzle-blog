@@ -14,14 +14,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/_frontend/shared/ui/dropdown-menu'
+import { useTheme } from '@/_frontend/app/providers/Theme'
 
 const LOGO_WIDTH = 491 * 0.35
 const LOGO_HEIGHT = 110 * 0.35
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false)
-  const [theme, setTheme] = useState<'light' | 'dark'>('light')
   const [isOpen, setIsOpen] = useState(false)
+  const { theme, setTheme } = useTheme()
 
   // Mock user data - replace with actual auth
   const user = {
@@ -65,7 +66,14 @@ export default function Navigation() {
               alt="Logo"
               width={LOGO_WIDTH * (isScrolled ? 0.8 : 1)}
               height={LOGO_HEIGHT * (isScrolled ? 0.8 : 1)}
-              className="transition-all duration-300"
+              className="transition-all duration-300 dark:hidden block"
+            />
+            <Image
+              src="/logo-dark.svg"
+              alt="Logo"
+              width={LOGO_WIDTH * (isScrolled ? 0.8 : 1)}
+              height={LOGO_HEIGHT * (isScrolled ? 0.8 : 1)}
+              className="transition-all duration-300 hidden dark:block"
             />
           </Link>
 

@@ -1,5 +1,5 @@
 'use client'
-import { useHeaderTheme } from '@/providers/HeaderTheme'
+import { useHeaderTheme } from '@/_frontend/app/providers/HeaderTheme'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'

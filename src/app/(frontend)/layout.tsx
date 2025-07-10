@@ -6,8 +6,8 @@ import { GeistSans } from 'geist/font/sans'
 import React from 'react'
 
 import { Footer } from '@/Footer/Component'
-import { Providers } from '@/providers'
-import { InitTheme } from '@/providers/Theme/InitTheme'
+import { Providers } from '@/_frontend/app/providers'
+import { InitTheme } from '@/_frontend/app/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
 
@@ -26,6 +26,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body>
         <Providers>
+          <InitTheme />
           <Header />
           {children}
           <Footer />
