@@ -1,5 +1,5 @@
 'use client'
-import { useHeaderTheme } from '@/_frontend/app/providers/HeaderTheme'
+import { useHeaderTheme } from '@/_frontend/shared/providers/HeaderTheme'
 import React, { useEffect } from 'react'
 
 import type { Page } from '@/payload-types'

@@ -1,44 +1,52 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
-import { Menu, Sun, Moon, User } from 'lucide-react'
-import { Button } from '@/_frontend/shared/ui/button'
+import { useTheme } from '@/_frontend/shared/providers/Theme'
 import { Avatar, AvatarFallback, AvatarImage } from '@/_frontend/shared/ui/avatar'
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/_frontend/shared/ui/sheet'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/_frontend/shared/ui/dropdown-menu'
-import { useTheme } from '@/_frontend/app/providers/Theme'
+import { Moon, Sun } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import * as React from 'react'
+import { cn } from '../lib/cn'
+import { Button } from './button'
+import { MobileNav } from './mobile-nav'
 
-const LOGO_WIDTH = 491 * 0.35
-const LOGO_HEIGHT = 110 * 0.35
+export function Header() {
+  const [isScrolled, setIsScrolled] = React.useState(false)
+  const navRef = React.useRef<HTMLElement>(null)
+  const [underlineStyle, setUnderlineStyle] = React.useState({ left: 0, width: 0, opacity: 0 })
 
-export default function Navigation() {
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
-  const { theme, setTheme } = useTheme()
-
-  // Mock user data - replace with actual auth
-  const user = {
-    name: 'John Doe',
-    email: 'john@example.com',
-    avatar: '/placeholder.svg?height=32&width=32',
-  }
-
-  useEffect(() => {
+  React.useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20)
+      if (window.scrollY > 50) {
+        // Adjust scroll threshold as needed
+        setIsScrolled(true)
+      } else {
+        setIsScrolled(false)
+      }
     }
 
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  const handleMouseEnter = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const target = e.currentTarget
+    if (navRef.current) {
+      const navRect = navRef.current.getBoundingClientRect()
+      const linkRect = target.getBoundingClientRect()
+      setUnderlineStyle({
+        left: linkRect.left - navRect.left,
+        width: linkRect.width,
+        opacity: 1,
+      })
+    }
+  }
+
+  const handleMouseLeave = () => {
+    setUnderlineStyle((prev) => ({ ...prev, opacity: 0 }))
+  }
+
+  const { theme, setTheme } = useTheme()
 
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light'
@@ -46,145 +54,79 @@ export default function Navigation() {
     document.documentElement.classList.toggle('dark', newTheme === 'dark')
   }
 
-  const navLinks = [
-    { href: '/blog', label: 'Blog' },
-    { href: '/challenges', label: 'Challenges' },
-    { href: '/support', label: 'Support Us' },
-  ]
-
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b transition-all duration-300 ${
-        isScrolled ? 'py-2' : 'py-4'
-      }`}
+      className={cn(
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+        'bg-white/80 backdrop-blur-sm dark:bg-gray-950/80', // Semi-transparent background
+        isScrolled ? 'py-2 shadow-md' : 'py-4',
+      )}
     >
-      <div className="container mx-auto px-4">
-        <nav className="flex items-center justify-between">
-          <Link href="/" className="flex items-center space-x-2">
+      <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
+        <div className="flex items-center gap-4">
+          <Link href="/" className="flex items-center">
             <Image
               src="/logo.svg"
               alt="Logo"
-              width={LOGO_WIDTH * (isScrolled ? 0.8 : 1)}
-              height={LOGO_HEIGHT * (isScrolled ? 0.8 : 1)}
-              className="transition-all duration-300 dark:hidden block"
+              width={172} // Updated width
+              height={39} // Updated height
+              className="transition-all duration-300 dark:hidden"
             />
             <Image
               src="/logo-dark.svg"
               alt="Logo"
-              width={LOGO_WIDTH * (isScrolled ? 0.8 : 1)}
-              height={LOGO_HEIGHT * (isScrolled ? 0.8 : 1)}
+              width={172} // Updated width
+              height={39} // Updated height
               className="transition-all duration-300 hidden dark:block"
             />
           </Link>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-foreground/80 hover:text-foreground transition-colors font-medium"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
-
-          {/* Desktop Actions */}
-          <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" size="icon" onClick={toggleTheme} className="rounded-full">
-              {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-              <span className="sr-only">Toggle theme</span>
-            </Button>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src={user.avatar || '/placeholder.svg'} alt={user.name} />
-                    <AvatarFallback>
-                      <User className="h-4 w-4" />
-                    </AvatarFallback>
-                  </Avatar>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="end" forceMount>
-                <div className="flex items-center justify-start gap-2 p-2">
-                  <div className="flex flex-col space-y-1 leading-none">
-                    <p className="font-medium">{user.name}</p>
-                    <p className="w-[200px] truncate text-sm text-muted-foreground">{user.email}</p>
-                  </div>
-                </div>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Settings</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Log out</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-
-          {/* Mobile Menu */}
-          <div className="md:hidden flex items-center space-x-2">
-            <Button variant="ghost" size="icon" onClick={toggleTheme} className="rounded-full">
-              {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-              <span className="sr-only">Toggle theme</span>
-            </Button>
-
-            <Sheet open={isOpen} onOpenChange={setIsOpen}>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full">
-                  <Menu className="h-5 w-5" />
-                  <span className="sr-only">Toggle menu</span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-                <div className="flex flex-col space-y-6 mt-6">
-                  {/* User Profile in Mobile */}
-                  <div className="flex items-center space-x-3 pb-4 border-b">
-                    <Avatar className="h-10 w-10">
-                      <AvatarImage src={user.avatar || '/placeholder.svg'} alt={user.name} />
-                      <AvatarFallback>
-                        <User className="h-5 w-5" />
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col">
-                      <p className="font-medium">{user.name}</p>
-                      <p className="text-sm text-muted-foreground">{user.email}</p>
-                    </div>
-                  </div>
-
-                  {/* Navigation Links */}
-                  <nav className="flex flex-col space-y-4">
-                    {navLinks.map((link) => (
-                      <SheetClose asChild key={link.href}>
-                        <Link
-                          href={link.href}
-                          className="text-lg font-medium hover:text-primary transition-colors"
-                        >
-                          {link.label}
-                        </Link>
-                      </SheetClose>
-                    ))}
-                  </nav>
-
-                  {/* Mobile User Actions */}
-                  <div className="flex flex-col space-y-2 pt-4 border-t">
-                    <Button variant="ghost" className="justify-start">
-                      Profile
-                    </Button>
-                    <Button variant="ghost" className="justify-start">
-                      Settings
-                    </Button>
-                    <Button variant="ghost" className="justify-start text-red-600">
-                      Log out
-                    </Button>
-                  </div>
-                </div>
-              </SheetContent>
-            </Sheet>
-          </div>
+        </div>
+        <nav ref={navRef} className="relative hidden items-center gap-6 lg:flex">
+          <Link
+            href="/blog"
+            className="text-sm font-medium py-1" // Added py-1 for space for the underline
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            Blog
+          </Link>
+          <Link
+            href="/support-us"
+            className="text-sm font-medium py-1"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            Support Us
+          </Link>
+          <Link
+            href="/challenges"
+            className="text-sm font-medium py-1"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            Challenges
+          </Link>
+          {/* The moving underline element */}
+          <div
+            className="absolute bottom-0 h-[2px] bg-primary transition-all duration-300 ease-out"
+            style={{
+              left: underlineStyle.left,
+              width: underlineStyle.width,
+              opacity: underlineStyle.opacity,
+            }}
+          />
         </nav>
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" size="icon" onClick={toggleTheme} className="rounded-full">
+            {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+            <span className="sr-only">Toggle theme</span>
+          </Button>
+          <Avatar className="h-8 w-8">
+            <AvatarImage src="/placeholder-user.jpg" alt="@username" />
+            <AvatarFallback>JD</AvatarFallback>
+          </Avatar>
+          <MobileNav />
+        </div>
       </div>
     </header>
   )

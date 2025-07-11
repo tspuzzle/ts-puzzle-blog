@@ -7,13 +7,13 @@ import React from 'react'
 
 import { Footer } from '@/Footer/Component'
 import { Providers } from '@/_frontend/app/providers'
-import { InitTheme } from '@/_frontend/app/providers/Theme/InitTheme'
+import { InitTheme } from '@/_frontend/shared/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
 
 import '@/_frontend/app/styles/globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
-import Header from '@/_frontend/shared/ui/header'
+import { Header } from '@/_frontend/shared/ui/header'
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
