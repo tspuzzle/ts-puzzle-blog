@@ -40,7 +40,7 @@ export const CenteredLayout = ({
 
       {/* Right gradient from content end to screen edge (white to transparent) */}
       <div
-        className="absolute inset-y-0 right-0 z-10 bg-gradient-to-l from-white dark:from-black to-transparent"
+        className="absolute inset-y-0 right-0 z-10 bg-gradient-to-r from-white dark:from-black to-transparent"
         style={{
           width: 'calc(50vw - 28rem)', // 28rem is half of max-w-4xl (56rem)
         }}

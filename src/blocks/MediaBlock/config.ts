@@ -5,10 +5,19 @@ export const MediaBlock: Block = {
   interfaceName: 'MediaBlock',
   fields: [
     {
+      name: 'caption',
+      type: 'richText',
+    },
+    {
       name: 'media',
       type: 'upload',
       relationTo: 'media',
       required: true,
+    },
+    {
+      name: 'mediaDark',
+      type: 'upload',
+      relationTo: 'media',
     },
   ],
 }

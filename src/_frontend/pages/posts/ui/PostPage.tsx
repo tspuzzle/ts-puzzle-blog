@@ -32,7 +32,7 @@ export const PostPage = async ({ post }: { post: Post }) => {
             */}
         </div>
 
-        <RichText data={post.content} />
+        <RichText data={post.content} enableGutter={false} className="pt-4" />
       </article>
 
       {/* More Posts Section */}

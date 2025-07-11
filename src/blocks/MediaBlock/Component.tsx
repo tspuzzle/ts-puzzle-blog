@@ -21,16 +21,15 @@ type Props = MediaBlockProps & {
 export const MediaBlock: React.FC<Props> = (props) => {
   const {
     captionClassName,
+    caption,
     className,
     enableGutter = true,
     imgClassName,
     media,
+    mediaDark,
     staticImage,
     disableInnerContainer,
   } = props
-
-  let caption
-  if (media && typeof media === 'object') caption = media.caption
 
   return (
     <div
@@ -44,8 +43,23 @@ export const MediaBlock: React.FC<Props> = (props) => {
     >
       {(media || staticImage) && (
         <Media
-          imgClassName={cn('border border-border rounded-[0.8rem]', imgClassName)}
+          imgClassName={cn(
+            'border border-border rounded-[0.8rem]',
+            mediaDark && 'dark:hidden',
+            imgClassName,
+          )}
           resource={media}
+          src={staticImage}
+        />
+      )}
+      {(mediaDark || staticImage) && (
+        <Media
+          imgClassName={cn(
+            'border border-border rounded-[0.8rem]',
+            mediaDark && 'hidden dark:block',
+            imgClassName,
+          )}
+          resource={mediaDark}
           src={staticImage}
         />
       )}
