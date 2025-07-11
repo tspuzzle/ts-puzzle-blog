@@ -59,7 +59,7 @@ export function Header() {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
         'bg-white/80 backdrop-blur-sm dark:bg-gray-950/80', // Semi-transparent background
-        isScrolled ? 'py-2 shadow-md' : 'py-4',
+        isScrolled ? 'py-1 shadow-md' : 'py-2',
       )}
     >
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
@@ -68,15 +68,15 @@ export function Header() {
             <Image
               src="/logo.svg"
               alt="Logo"
-              width={172} // Updated width
-              height={39} // Updated height
+              width={172 * (isScrolled ? 0.8 : 1)} // Updated width
+              height={39 * (isScrolled ? 0.8 : 1)} // Updated height
               className="transition-all duration-300 dark:hidden"
             />
             <Image
               src="/logo-dark.svg"
               alt="Logo"
-              width={172} // Updated width
-              height={39} // Updated height
+              width={172 * (isScrolled ? 0.8 : 1)} // Updated width
+              height={39 * (isScrolled ? 0.8 : 1)} // Updated height
               className="transition-all duration-300 hidden dark:block"
             />
           </Link>
