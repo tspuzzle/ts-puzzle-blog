@@ -1,7 +1,8 @@
+'use server'
 import { getPayload } from '@payload-config'
 import { draftMode } from 'next/headers'
 
-export const queryPostBySlug = async ({ slug }: { slug: string }) => {
+export const getPostBySlug = async ({ slug }: { slug: string }) => {
   const { isEnabled: draft } = await draftMode()
 
   const payload = await getPayload()
