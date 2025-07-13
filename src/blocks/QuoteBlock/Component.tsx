@@ -9,7 +9,6 @@ type Props = QuoteBlockProps
 export const QuoteBlock: React.FC<Props> = (props) => {
   const { quote } = props
 
-  console.log('QuoteBlock props:', props)
   return (
     <div
       className={cn(
