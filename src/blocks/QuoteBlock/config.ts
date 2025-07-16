@@ -1,3 +1,4 @@
+import { limitedLexical } from '@/_admin/fields/limitedLexical'
 import type { Block } from 'payload'
 
 export const QuoteBlock: Block = {
@@ -8,6 +9,7 @@ export const QuoteBlock: Block = {
       name: 'quote',
       type: 'richText',
       required: true,
+      editor: limitedLexical,
     },
   ],
 }

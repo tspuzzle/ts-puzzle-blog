@@ -45,7 +45,7 @@ export const CenteredLayout = ({
           width: 'calc(50vw - 28rem)', // 28rem is half of max-w-4xl (56rem)
         }}
       />
-      <div className="relative z-20 mx-auto max-w-4xl bg-white dark:bg-black px-4 py-6 md:px-6 lg:py-16 md:py-12">
+      <div className="relative mx-auto max-w-4xl bg-white dark:bg-black px-4 py-6 md:px-6 lg:py-16 md:py-12">
         {children}
       </div>
     </div>

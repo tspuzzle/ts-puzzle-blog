@@ -1728,6 +1728,15 @@ export interface CodeBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ChallengeBlock".
+ */
+export interface ChallengeBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'challengeBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "QuoteBlock".
  */
 export interface QuoteBlock {
