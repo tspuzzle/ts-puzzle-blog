@@ -1,21 +1,16 @@
 import React from 'react'
 
 import { Code } from './Component.client'
-
-export type CodeBlockProps = {
-  code: string
-  language?: string
-  blockType: 'code'
-}
+import type { CodeBlock as CodeBlockProps } from '@/payload-types'
 
 type Props = CodeBlockProps & {
   className?: string
 }
 
-export const CodeBlock: React.FC<Props> = ({ className, code, language }) => {
+export const CodeBlock: React.FC<Props> = ({ className, code, language, includeLines }) => {
   return (
     <div className={[className, 'not-prose'].filter(Boolean).join(' ')}>
-      <Code code={code} language={language} />
+      <Code code={code} language={language as string} includeLines={includeLines} />
     </div>
   )
 }

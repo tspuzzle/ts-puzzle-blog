@@ -1,53 +1,43 @@
 import { cn } from '@/_frontend/shared/lib/cn'
 import { CheckCircle2, CircleDot, XCircle } from 'lucide-react'
+import { TestCase, TestCaseStatus, TestCaseState } from '../model'
+import RichText from '@/_frontend/shared/ui/rich-text'
 
-interface TestCaseCardProps {
-  id: string
-  task: string
-  expected: string
-  status: 'not-run' | 'failed' | 'passed'
-  index: number
-  isCompact: boolean
-}
+type TestCaseCardProps = TestCase &
+  TestCaseState & {
+    index: number
+    isCompact: boolean
+  }
 
-// Helper function to apply syntax-like highlighting
-const formatCodeSnippet = (code: string) => {
-  // Simple regex for numbers and specific keywords/types for demonstration
-  return code
-    .replace(/(\b\d+\b)/g, '<span class="text-purple-600 dark:text-purple-400">$1</span>') // Numbers
-    .replace(/(\bMyReturnType\b)/g, '<span class="text-orange-600 dark:text-orange-400">$1</span>') // Specific type
-    .replace(/(=>)/g, '<span class="text-gray-700 dark:text-gray-300">$1</span>') // Arrow function
-}
-
-export function TestCaseCard({ id, task, expected, status, index, isCompact }: TestCaseCardProps) {
+export function TestCaseCard({ task, expected, status, index, isCompact }: TestCaseCardProps) {
   const statusIcon = {
-    'not-run': <CircleDot className="h-4 w-4 text-gray-500" />,
-    failed: <XCircle className="h-4 w-4 text-red-500" />,
-    passed: <CheckCircle2 className="h-4 w-4 text-green-500" />,
+    [TestCaseStatus.NOT_RUN]: <CircleDot className="h-4 w-4 text-gray-500" />,
+    [TestCaseStatus.FAILED]: <XCircle className="h-4 w-4 text-red-500" />,
+    [TestCaseStatus.PASSED]: <CheckCircle2 className="h-4 w-4 text-green-500" />,
   }[status]
 
   const statusText = {
-    'not-run': 'NOT RUN',
-    failed: 'FAILED',
-    passed: 'PASSED',
+    [TestCaseStatus.NOT_RUN]: 'NOT RUN',
+    [TestCaseStatus.FAILED]: 'FAILED',
+    [TestCaseStatus.PASSED]: 'PASSED',
   }[status]
 
   const borderColorClass = {
-    'not-run': 'border-gray-200 dark:border-gray-700',
-    failed: 'border-red-500',
-    passed: 'border-green-500',
+    [TestCaseStatus.NOT_RUN]: 'border-gray-200 dark:border-gray-700',
+    [TestCaseStatus.FAILED]: 'border-red-500',
+    [TestCaseStatus.PASSED]: 'border-green-500',
   }[status]
 
   const statusBgClass = {
-    'not-run': 'bg-gray-200 dark:bg-gray-700',
-    failed: 'bg-red-500',
-    passed: 'bg-green-500',
+    [TestCaseStatus.NOT_RUN]: 'bg-gray-200 dark:bg-gray-700',
+    [TestCaseStatus.FAILED]: 'bg-red-500',
+    [TestCaseStatus.PASSED]: 'bg-green-500',
   }[status]
 
   const statusTextClass = {
-    'not-run': 'text-gray-700 dark:text-gray-300',
-    failed: 'text-red-500',
-    passed: 'text-green-500',
+    [TestCaseStatus.NOT_RUN]: 'text-gray-700 dark:text-gray-300',
+    [TestCaseStatus.FAILED]: 'text-red-500',
+    [TestCaseStatus.PASSED]: 'text-green-500',
   }[status]
 
   return (
@@ -72,29 +62,25 @@ export function TestCaseCard({ id, task, expected, status, index, isCompact }: T
         </div>
       )}
 
-      <div className={cn('flex flex-row items-center justify-between p-2')}>
-        <div className={cn('font-medium text-sm')}># {index + 1}</div>
-        <div className="flex items-center gap-2">
-          {statusIcon}
-          {!isCompact && <span className={cn('text-xs', statusTextClass)}>{statusText}</span>}
+      {isCompact && (
+        <div className={cn('flex flex-row items-center justify-between p-2')}>
+          <div className={cn('font-medium text-sm')}># {index + 1}</div>
+          <div className="flex items-center gap-2">
+            {statusIcon}
+            {!isCompact && <span className={cn('text-xs', statusTextClass)}>{statusText}</span>}
+          </div>
         </div>
-      </div>
+      )}
 
       {!isCompact && (
-        <div className="p-2 pt-0">
+        <div className="p-2">
           <div>
             <h4 className="text-xs font-semibold m-0">Task:</h4>
-            <pre
-              className="whitespace-pre-wrap font-mono text-sm bg-gray-100 dark:bg-gray-900 p-2 rounded-md"
-              dangerouslySetInnerHTML={{ __html: formatCodeSnippet(task.trim()) }}
-            />
+            <RichText data={task} enableGutter={false} />
           </div>
-          <div>
-            <h4 className="text-md font-semibold mb-1">Expected result:</h4>
-            <pre
-              className="whitespace-pre-wrap font-mono text-sm bg-gray-100 dark:bg-gray-900 p-2 rounded-md"
-              dangerouslySetInnerHTML={{ __html: formatCodeSnippet(expected.trim()) }}
-            />
+          <div className="mt-1">
+            <h4 className="text-xs font-semibold m-0">Expected result:</h4>
+            <RichText data={expected} enableGutter={false} />
           </div>
         </div>
       )}

@@ -1,220 +1,67 @@
 'use client'
-import React, { useEffect } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import type { ChallengeBlock as ChallengeBlockProps } from '@/payload-types'
 
 type Props = ChallengeBlockProps
 
+import { cn } from '@/_frontend/shared/lib/cn'
 import { Button } from '@/_frontend/shared/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/_frontend/shared/ui/card'
+import { ChevronLeft, ChevronRight, Code, Eye, EyeOff, Maximize, Minimize } from 'lucide-react'
 import { CodeEditor } from './challenge/code-editor'
 import { TestCaseList } from './challenge/test-case-list'
-import { ListCollapse, ListRestart, Code, Maximize, Minimize, Eye, EyeOff } from 'lucide-react'
-import { cn } from '@/_frontend/shared/lib/cn'
 
-// Import Resizable components
 import {
-  ResizablePanelGroup,
-  ResizablePanel,
   ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
 } from '@/_frontend/shared/ui/resizable'
 import RichText from '@/_frontend/shared/ui/rich-text'
+import { useCompactMode } from './hooks/useCompactMode'
+import { useFullscreenMode } from './hooks/useFullscreenMode'
+import { TestCaseState, TestCaseStatus } from './model'
 
-// Dummy data for the challenge (can be passed as props later if needed)
-const challengeData = {
-  title: 'TypeScript Type Challenge: DeepReadonly',
-  description: {
-    root: {
-      type: 'root',
-      format: '',
-      indent: 0,
-      version: 1,
-      children: [
-        {
-          type: 'paragraph',
-          format: '',
-          indent: 0,
-          version: 1,
-          children: [
-            {
-              mode: 'normal',
-              text: 'Hello, it is very exciting',
-              type: 'text',
-              style: '',
-              detail: 0,
-              format: 1,
-              version: 1,
-            },
-          ],
-          direction: 'ltr',
-          textStyle: '',
-          textFormat: 1,
-        },
-        {
-          type: 'paragraph',
-          format: '',
-          indent: 0,
-          version: 1,
-          children: [
-            {
-              mode: 'normal',
-              text: 'asdasd',
-              type: 'text',
-              style: '',
-              detail: 0,
-              format: 0,
-              version: 1,
-            },
-          ],
-          direction: 'ltr',
-          textStyle: '',
-          textFormat: 0,
-        },
-      ],
-      direction: 'ltr',
-      textFormat: 1,
-    },
-  },
-  testCases: [
-    {
-      id: '1',
-      task: `
-        interface Todo {
-          title: string;
-          description: string;
-          completed: boolean;
-          meta: {
-            author: string;
-          };
-        }
-        type Expected = {
-          readonly title: string;
-          readonly description: string;
-          readonly completed: boolean;
-          readonly meta: {
-            readonly author: string;
-          };
-        };
-        type Result = DeepReadonly<Todo>;
-        type Test = Expect<Equal<Result, Expected>>;
-      `,
-      expected: 'type Test = true;',
-      status: 'not-run',
-    },
-    {
-      id: '2',
-      task: `
-        type NestedObject = {
-          a: string;
-          b: {
-            c: number;
-            d: {
-              e: boolean;
-            };
-          };
-        };
-        type Expected = {
-          readonly a: string;
-          readonly b: {
-            readonly c: number;
-            readonly d: {
-              readonly e: boolean;
-            };
-          };
-        };
-        type Result = DeepReadonly<NestedObject>;
-        type Test = Expect<Equal<Result, Expected>>;
-      `,
-      expected: 'type Test = true;',
-      status: 'not-run',
-    },
-    {
-      id: '3',
-      task: `
-        type SimpleType = string;
-        type Expected = string;
-        type Result = DeepReadonly<SimpleType>;
-        type Test = Expect<Equal<Result, Expected>>;
-      `,
-      expected: 'type Test = true;',
-      status: 'not-run',
-    },
-    {
-      id: '4',
-      task: `
-        type ArrayType = string[];
-        type Expected = readonly string[];
-        type Result = DeepReadonly<ArrayType>;
-        type Test = Expect<Equal<Result, Expected>>;
-      `,
-      expected: 'type Test = true;',
-      status: 'not-run',
-    },
-  ],
-  initialCode: `
-type DeepReadonly<T> = any; // Implement this type
-  `,
-}
-
-export const ChallengeBlock: React.FC<Props> = (props) => {
-  const [isCompactMode, setIsCompactMode] = React.useState(false)
-  const [isFullScreen, setIsFullScreen] = React.useState(false)
+export const ChallengeBlock: React.FC<Props> = ({ description, title, testCases, initialCode }) => {
   const [showDescription, setShowDescription] = React.useState(true)
-  const [testCases, setTestCases] = React.useState(challengeData.testCases)
-  const [code, setCode] = React.useState(challengeData.initialCode)
 
-  const testCasesPanelRef = React.useRef<HTMLDivElement>(null) // Ref for the inner div of the test cases panel
+  const { isCompactMode, setIsCompactMode, testCasesPanelRef } = useCompactMode()
+  const { isFullScreen, setIsFullScreen } = useFullscreenMode()
 
-  const passedCount = testCases.filter((tc) => tc.status === 'passed').length
-  const totalCount = testCases.length
+  const [code, setCode] = React.useState(initialCode || '')
 
-  // Function to simulate running tests (for demonstration)
+  const [testCaseStates, setTestCaseStates] = useState<TestCaseState[]>(
+    (testCases || []).map((t) => ({ status: TestCaseStatus.NOT_RUN, id: t.id })),
+  )
+
   const runTests = () => {
-    const updatedTestCases = testCases.map((testCase) => {
-      // Simulate test logic: 50% chance of passing
-      const newStatus = Math.random() > 0.5 ? 'passed' : 'failed'
-      return { ...testCase, status: newStatus }
+    const updatedTestCases = (testCases || []).map(() => {
+      const newStatus = Math.random() > 0.5 ? TestCaseStatus.PASSED : TestCaseStatus.FAILED
+      return { status: newStatus }
     })
-    setTestCases(updatedTestCases)
+    setTestCaseStates(updatedTestCases)
   }
 
-  useEffect(() => {
-    const panelElement = testCasesPanelRef.current
-    if (!panelElement) return
-
-    const resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const currentWidth = entry.contentRect.width
-        const threshold = 150 // px
-
-        if (currentWidth < threshold && !isCompactMode) {
-          setIsCompactMode(true)
-        }
-
-        if (currentWidth >= threshold && isCompactMode) {
-          setIsCompactMode(false)
-        }
-      }
-    })
-
-    resizeObserver.observe(panelElement)
-
-    return () => {
-      resizeObserver.unobserve(panelElement)
-    }
-  }, [isCompactMode]) // Re-run effect if these states change
+  const { totalCount, passedCount } = useMemo(
+    () => ({
+      totalCount: testCaseStates.length,
+      passedCount: testCaseStates.filter((tc) => tc.status === TestCaseStatus.PASSED).length,
+    }),
+    [testCaseStates],
+  )
 
   return (
-    <Card
+    <div
       className={cn(
-        'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 flex flex-col',
-        isFullScreen && 'fixed inset-0 z-[50] h-screen w-screen rounded-none ',
+        'challenge-block',
+        'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 flex flex-col rounded border ',
+        isFullScreen &&
+          'fixed inset-0 z-[50] h-screen max-h-screen w-screen rounded-none flex flex-col overflow-scroll',
       )}
     >
       <div className="flex flex-row items-center justify-between flex-shrink-0 p-4">
         <div className="text-xl font-bold flex items-center gap-2 text-primary m-0">
           <Code className="h-6 w-6" />
-          {challengeData.title}
+          {title}
         </div>
         <Button variant="ghost" size="icon" onClick={() => setIsFullScreen(!isFullScreen)}>
           {isFullScreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
@@ -223,7 +70,7 @@ export const ChallengeBlock: React.FC<Props> = (props) => {
       </div>
 
       {/* Task Description */}
-      <div className="p-4">
+      <div className={cn('p-4 pt-0')}>
         <div className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 flex-shrink-0 rounded">
           <div className="flex flex-row items-center justify-between p-4">
             <div className="text-md font-bold m-0">Task Description</div>
@@ -240,50 +87,52 @@ export const ChallengeBlock: React.FC<Props> = (props) => {
             </Button>
           </div>
           {showDescription && (
-            <div className="p-4 pt-0">
-              <RichText data={challengeData.description} enableGutter={false} />
+            <div className={cn('p-4 pt-0', isFullScreen && 'max-h-[150px] overflow-y-scroll')}>
+              <RichText data={description} enableGutter={false} />
             </div>
           )}
         </div>
       </div>
 
-      <div className="h-[400px] ">
+      <div className={cn(isFullScreen ? 'flex-grow min-h-[200px]' : 'h-[400px]')}>
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel>
             {/* Attach ref to this inner div */}
             <div className="flex flex-col p-4 h-full">
               <div className="flex justify-between items-center mb-4 flex-shrink-0">
                 <div className="text-md flex justify-between items-center w-full">
-                  <span className="font-bold">Test Cases:</span>
+                  {!isCompactMode && <span className="font-bold">Test Cases:</span>}
                   <span className="text-sm">
                     {passedCount} of {totalCount} passed
                   </span>
                 </div>
-                {/*
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm" onClick={resetTests}>
-                    <ListRestart className="h-4 w-4" />
-                    <span className="sr-only">Reset Tests</span>
-                  </Button>
-                  {!isAutoCompactActive && ( // Only show button if not in auto-compact mode
-                    <Button variant="outline" size="sm" onClick={handleToggleCompactMode}>
-                      <ListCollapse className="h-4 w-4" />
-                      <span className="sr-only">Toggle Compact Mode</span>
-                    </Button>
-                  )}
-                </div>
-                */}
               </div>
-              <div className="flex-1 overflow-y-auto" ref={testCasesPanelRef}>
-                <TestCaseList testCases={testCases} isCompact={isCompactMode} />
+              <div className="flex-1 overflow-y-scroll" ref={testCasesPanelRef}>
+                <TestCaseList
+                  testCases={testCases || []}
+                  testCaseStates={testCaseStates}
+                  isCompact={isCompactMode}
+                />
               </div>
             </div>
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel defaultSize={50} minSize={20}>
-            <div className="flex flex-col h-full p-4">
-              <div>
-                <span className="text-lg font-bold mb-4 flex-shrink-0">Your Code</span>
+            <div className="flex flex-col h-full p-4 ">
+              <div className="flex gap-2 items-center mb-4">
+                <Button
+                  variant="ghost"
+                  size="clear"
+                  onClick={() => setIsCompactMode(!isCompactMode)}
+                >
+                  {isCompactMode ? (
+                    <ChevronLeft className="h-4 w-4" />
+                  ) : (
+                    <ChevronRight className="h-4 w-4" />
+                  )}
+                  <span className="sr-only">Toggle Compact Mode</span>
+                </Button>
+                <span className="text-md font-bold flex-shrink-0">Your Code</span>
               </div>
               <CodeEditor value={code} onChange={setCode} className="flex-1" />
               <Button onClick={runTests} className="mt-4 w-full flex-shrink-0">
@@ -293,6 +142,6 @@ export const ChallengeBlock: React.FC<Props> = (props) => {
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
-    </Card>
+    </div>
   )
 }

@@ -3,6 +3,7 @@ import {
   BlocksFeature,
   BoldFeature,
   ChecklistFeature,
+  FixedToolbarFeature,
   HorizontalRuleFeature,
   InlineCodeFeature,
   ItalicFeature,
@@ -13,6 +14,7 @@ import {
 
 export const limitedLexical = lexicalEditor({
   features: [
+    FixedToolbarFeature(),
     ParagraphFeature(),
     UnderlineFeature(),
     InlineCodeFeature(),

@@ -1,27 +1,20 @@
+import { TestCase, TestCaseState } from '../model'
 import { TestCaseCard } from './test-case-card'
-
-interface TestCase {
-  id: string
-  task: string
-  expected: string
-  status: 'not-run' | 'failed' | 'passed'
-}
 
 interface TestCaseListProps {
   testCases: TestCase[]
+  testCaseStates: TestCaseState[]
   isCompact: boolean
 }
 
-export function TestCaseList({ testCases, isCompact }: TestCaseListProps) {
+export function TestCaseList({ testCases = [], isCompact, testCaseStates }: TestCaseListProps) {
   return (
     <div className="grid gap-4">
       {testCases.map((testCase, index) => (
         <TestCaseCard
           key={testCase.id}
-          id={testCase.id}
-          task={testCase.task}
-          expected={testCase.expected}
-          status={testCase.status}
+          {...testCase}
+          status={testCaseStates[index]?.status || 'not-run'}
           index={index}
           isCompact={isCompact}
         />
