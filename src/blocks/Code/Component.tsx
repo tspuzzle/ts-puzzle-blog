@@ -3,7 +3,7 @@ import React from 'react'
 import { Code } from './Component.client'
 import type { CodeBlock as CodeBlockProps } from '@/payload-types'
 
-type Props = CodeBlockProps & {
+export type Props = CodeBlockProps & {
   className?: string
 }
 

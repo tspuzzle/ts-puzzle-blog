@@ -11,7 +11,7 @@ import {
   RichText as ConvertRichText,
 } from '@payloadcms/richtext-lexical/react'
 
-import { CodeBlock, CodeBlockProps } from '@/blocks/Code/Component'
+import { CodeBlock } from '@/blocks/Code/Component'
 
 import type {
   BannerBlock as BannerBlockProps,
@@ -19,6 +19,7 @@ import type {
   MediaBlock as MediaBlockProps,
   QuoteBlock as QuoteBlockProps,
   ChallengeBlock as ChallengeBlockProps,
+  CodeBlock as CodeBlockProps,
 } from '@/payload-types'
 import { BannerBlock } from '@/blocks/Banner/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
