@@ -1,5 +1,5 @@
 import { TestCase, TestCaseState } from '../model'
-import { TestCaseCard } from './test-case-card'
+import { TestCaseCard } from './TestCaseCard'
 
 interface TestCaseListProps {
   testCases: TestCase[]
