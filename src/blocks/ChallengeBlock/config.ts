@@ -39,7 +39,7 @@ export const ChallengeBlockBlock: Block = {
         },
         {
           name: 'test',
-          type: 'text',
+          type: 'textarea',
           required: true,
         },
       ],

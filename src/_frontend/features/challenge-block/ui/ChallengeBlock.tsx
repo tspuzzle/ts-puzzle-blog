@@ -1,9 +1,5 @@
 'use client'
-import React, { useMemo, useState } from 'react'
-
-import type { ChallengeBlock as ChallengeBlockProps } from '@/payload-types'
-
-type Props = ChallengeBlockProps
+import React, { useMemo } from 'react'
 
 import { cn } from '@/_frontend/shared/lib/cn'
 import { Button } from '@/_frontend/shared/ui/button'
@@ -19,27 +15,21 @@ import {
 import RichText from '@/_frontend/shared/ui/rich-text'
 import { useCompactMode } from '../lib/useCompactMode'
 import { useFullscreenMode } from '../lib/useFullscreenMode'
-import { TestCaseState, TestCaseStatus } from '../model'
+import { useRunTests } from '../lib/useRunTests'
+import { ChallengeBlock as ChallengeBlockProps, TestCaseStatus } from '../model'
 
-export const ChallengeBlock: React.FC<Props> = ({ description, title, testCases, initialCode }) => {
+type Props = ChallengeBlockProps
+
+export const ChallengeBlock: React.FC<Props> = (challengeBlockProps) => {
+  const { description, title, testCases } = challengeBlockProps
   const [showDescription, setShowDescription] = React.useState(true)
 
   const { isCompactMode, setIsCompactMode, testCasesPanelRef } = useCompactMode()
   const { isFullScreen, setIsFullScreen } = useFullscreenMode()
 
-  const [code, setCode] = React.useState(initialCode || '')
-
-  const [testCaseStates, setTestCaseStates] = useState<TestCaseState[]>(
-    (testCases || []).map((t) => ({ status: TestCaseStatus.NOT_RUN, id: t.id })),
-  )
-
-  const runTests = () => {
-    const updatedTestCases = (testCases || []).map(() => {
-      const newStatus = Math.random() > 0.5 ? TestCaseStatus.PASSED : TestCaseStatus.FAILED
-      return { status: newStatus }
-    })
-    setTestCaseStates(updatedTestCases)
-  }
+  const { code, setCode, testCaseStates, runTests } = useRunTests({
+    challengeBlock: challengeBlockProps,
+  })
 
   const { totalCount, passedCount } = useMemo(
     () => ({
