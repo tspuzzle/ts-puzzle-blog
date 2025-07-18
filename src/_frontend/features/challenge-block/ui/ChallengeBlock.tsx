@@ -1,5 +1,5 @@
 'use client'
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import { cn } from '@/_frontend/shared/lib/cn'
 import { Button } from '@/_frontend/shared/ui/button'
@@ -27,7 +27,7 @@ export const ChallengeBlock: React.FC<Props> = (challengeBlockProps) => {
   const { isCompactMode, setIsCompactMode, testCasesPanelRef } = useCompactMode()
   const { isFullScreen, setIsFullScreen } = useFullscreenMode()
 
-  const { code, setCode, testCaseStates, runTests } = useRunTests({
+  const { code, setCode, testCaseStates, runTests, isRunningTests } = useRunTests({
     challengeBlock: challengeBlockProps,
   })
 
@@ -39,6 +39,9 @@ export const ChallengeBlock: React.FC<Props> = (challengeBlockProps) => {
     [testCaseStates],
   )
 
+  const [resetColumnKey, setResetColumnKey] = useState(0)
+
+  console.log('isTestR', isRunningTests)
   return (
     <div
       className={cn(
@@ -85,8 +88,8 @@ export const ChallengeBlock: React.FC<Props> = (challengeBlockProps) => {
       </div>
 
       <div className={cn(isFullScreen ? 'flex-grow min-h-[200px]' : 'h-[400px]')}>
-        <ResizablePanelGroup direction="horizontal">
-          <ResizablePanel>
+        <ResizablePanelGroup direction="horizontal" key={resetColumnKey}>
+          <ResizablePanel defaultSize={40}>
             {/* Attach ref to this inner div */}
             <div className="flex flex-col p-4 h-full">
               <div className="flex justify-between items-center mb-4 flex-shrink-0">
@@ -102,18 +105,22 @@ export const ChallengeBlock: React.FC<Props> = (challengeBlockProps) => {
                   testCases={testCases || []}
                   testCaseStates={testCaseStates}
                   isCompact={isCompactMode}
+                  isChecking={isRunningTests}
                 />
               </div>
             </div>
           </ResizablePanel>
           <ResizableHandle withHandle />
-          <ResizablePanel defaultSize={50} minSize={20}>
+          <ResizablePanel defaultSize={60}>
             <div className="flex flex-col h-full p-4 ">
               <div className="flex gap-2 items-center mb-4">
                 <Button
                   variant="ghost"
                   size="clear"
-                  onClick={() => setIsCompactMode(!isCompactMode)}
+                  onClick={() => {
+                    setResetColumnKey((prev) => prev + 1)
+                    setIsCompactMode(false)
+                  }}
                 >
                   {isCompactMode ? (
                     <ChevronLeft className="h-4 w-4" />
@@ -125,8 +132,12 @@ export const ChallengeBlock: React.FC<Props> = (challengeBlockProps) => {
                 <span className="text-md font-bold flex-shrink-0">Your Code</span>
               </div>
               <CodeEditor value={code} onChange={setCode} className="flex-1" />
-              <Button onClick={runTests} className="mt-4 w-full flex-shrink-0">
-                Run
+              <Button
+                onClick={runTests}
+                className="mt-4 w-full flex-shrink-0"
+                disabled={isRunningTests}
+              >
+                {!isRunningTests ? 'Run' : 'Checking....'}
               </Button>
             </div>
           </ResizablePanel>

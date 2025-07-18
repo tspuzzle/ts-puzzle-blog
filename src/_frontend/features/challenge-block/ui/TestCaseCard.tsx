@@ -7,43 +7,53 @@ type TestCaseCardProps = TestCase &
   TestCaseState & {
     index: number
     isCompact: boolean
+    isChecking?: boolean
   }
 
-export function TestCaseCard({ task, expected, status, index, isCompact }: TestCaseCardProps) {
+export function TestCaseCard({
+  task,
+  expected,
+  status,
+  index,
+  isCompact,
+  isChecking,
+}: TestCaseCardProps) {
+  const _status = isChecking ? TestCaseStatus.CHECKING : status
+
   const statusIcon = {
     [TestCaseStatus.NOT_RUN]: <CircleDot className="h-4 w-4 text-gray-500" />,
     [TestCaseStatus.FAILED]: <XCircle className="h-4 w-4 text-red-500" />,
     [TestCaseStatus.PASSED]: <CheckCircle2 className="h-4 w-4 text-green-500" />,
-    [TestCaseStatus.CHECKING]: <Loader2 className="h-5 w-5 text-yellow-500 animate-spin" />,
-  }[status]
+    [TestCaseStatus.CHECKING]: <Loader2 className="h-4 w-4 text-yellow-500 animate-spin" />,
+  }[_status]
 
   const statusText = {
     [TestCaseStatus.NOT_RUN]: 'NOT RUN',
     [TestCaseStatus.FAILED]: 'FAILED',
     [TestCaseStatus.PASSED]: 'PASSED',
-    [TestCaseStatus.CHECKING]: 'CHECKING',
-  }[status]
+    [TestCaseStatus.CHECKING]: <Loader2 className="h-4 w-4  animate-spin" />,
+  }[_status]
 
   const borderColorClass = {
     [TestCaseStatus.NOT_RUN]: 'border-gray-200 dark:border-gray-700',
     [TestCaseStatus.FAILED]: 'border-red-500',
     [TestCaseStatus.PASSED]: 'border-green-500',
     [TestCaseStatus.CHECKING]: 'border-yellow-500',
-  }[status]
+  }[_status]
 
   const statusBgClass = {
     [TestCaseStatus.NOT_RUN]: 'bg-gray-200 dark:bg-gray-700',
     [TestCaseStatus.FAILED]: 'bg-red-500',
     [TestCaseStatus.PASSED]: 'bg-green-500',
     [TestCaseStatus.CHECKING]: 'bg-yellow-500',
-  }[status]
+  }[_status]
 
   const statusTextClass = {
     [TestCaseStatus.NOT_RUN]: 'text-gray-700 dark:text-gray-300',
     [TestCaseStatus.FAILED]: 'text-red-500',
     [TestCaseStatus.PASSED]: 'text-green-500',
     [TestCaseStatus.CHECKING]: 'text-yellow-500',
-  }[status]
+  }[_status]
 
   return (
     <div

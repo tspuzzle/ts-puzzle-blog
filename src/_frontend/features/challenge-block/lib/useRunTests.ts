@@ -1,11 +1,10 @@
 import { ChallengeBlock } from '@/payload-types'
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { TestCaseState, TestCaseStatus } from '../model'
 import { compileTypescriptCode } from '@/_frontend/shared/lib/ts-code-compiler'
 
 export const useRunTests = ({ challengeBlock }: { challengeBlock: ChallengeBlock }) => {
   const { initialCode, testCases } = challengeBlock
-  const [isRunningTests, setIsRunningTests] = useState(false)
 
   const [code, setCode] = useState(initialCode || '')
 
@@ -13,29 +12,28 @@ export const useRunTests = ({ challengeBlock }: { challengeBlock: ChallengeBlock
     (testCases || []).map((t) => ({ status: TestCaseStatus.NOT_RUN, id: t.id })),
   )
 
-  const runTests = async () => {
-    setIsRunningTests(true)
-    setTestCaseStates((prev) => prev.map(() => ({ status: TestCaseStatus.CHECKING })))
+  const [isRunningTests, startTransition] = useTransition()
 
-    await Promise.all(
-      (testCases || []).map((testCase, i) =>
-        compileTypescriptCode(`${code};${testCase.test}`).then((result) => {
-          setTestCaseStates((states) =>
-            states.map((state, index) => {
-              if (index === i) {
-                return {
-                  status: result.success ? TestCaseStatus.PASSED : TestCaseStatus.FAILED,
-                  //error: result.success ? '' : result.errors.join('\n'),
-                }
+  const runTests = async () => {
+    setTestCaseStates(() => (testCases || []).map(() => ({ status: TestCaseStatus.CHECKING })))
+
+    startTransition(async () => {
+      await Promise.all(
+        (testCases || []).map((testCase, i) =>
+          compileTypescriptCode(`${code};${testCase.test}`).then((result) => {
+            setTestCaseStates((states) => {
+              const newState = [...states]
+              newState[i] = {
+                status: result.success ? TestCaseStatus.PASSED : TestCaseStatus.FAILED,
               }
-              return state
-            }),
-          )
-        }),
-      ),
-    )
-    setIsRunningTests(false)
+              return newState
+            })
+          }),
+        ),
+      )
+      await new Promise((resolve) => setTimeout(resolve, 300)) // Simulate delay for UI feedback
+    })
   }
 
-  return { code, setCode, isRunningTests, setIsRunningTests, testCaseStates, runTests }
+  return { code, setCode, isRunningTests, testCaseStates, runTests }
 }
