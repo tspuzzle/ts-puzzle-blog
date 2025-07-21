@@ -3,7 +3,16 @@ import React, { useMemo, useState } from 'react'
 
 import { cn } from '@/_frontend/shared/lib/cn'
 import { Button } from '@/_frontend/shared/ui/button'
-import { ChevronLeft, ChevronRight, Code, Eye, EyeOff, Maximize, Minimize } from 'lucide-react'
+import {
+  CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
+  Code,
+  Eye,
+  EyeOff,
+  Maximize,
+  Minimize,
+} from 'lucide-react'
 import { CodeEditor } from './CodeEditor'
 import { TestCaseList } from './TestCaseList'
 
@@ -41,7 +50,7 @@ export const ChallengeBlock: React.FC<Props> = (challengeBlockProps) => {
 
   const [resetColumnKey, setResetColumnKey] = useState(0)
 
-  console.log('isTestR', isRunningTests)
+  const allTestCasesPassed = totalCount === passedCount
   return (
     <div
       className={cn(
@@ -49,12 +58,18 @@ export const ChallengeBlock: React.FC<Props> = (challengeBlockProps) => {
         'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 flex flex-col rounded border ',
         isFullScreen &&
           'fixed inset-0 z-[50] h-screen max-h-screen w-screen rounded-none flex flex-col overflow-scroll',
+        allTestCasesPassed && 'border-green-500 bg-green-50',
       )}
     >
       <div className="flex flex-row items-center justify-between flex-shrink-0 p-4">
-        <div className="text-xl font-bold flex items-center gap-2 text-primary m-0">
+        <div
+          className={cn(
+            'text-xl font-bold flex items-center gap-2 text-primary m-0',
+            allTestCasesPassed && 'text-green-500',
+          )}
+        >
           <Code className="h-6 w-6" />
-          {title}
+          {title} {allTestCasesPassed && <CheckCircle2 className="h-5 w-5" />}
         </div>
         <Button variant="ghost" size="icon" onClick={() => setIsFullScreen(!isFullScreen)}>
           {isFullScreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
@@ -93,12 +108,19 @@ export const ChallengeBlock: React.FC<Props> = (challengeBlockProps) => {
             {/* Attach ref to this inner div */}
             <div className="flex flex-col p-4 h-full">
               <div className="flex justify-between items-center mb-4 flex-shrink-0">
-                <div className="text-md flex justify-between items-center w-full">
-                  {!isCompactMode && <span className="font-bold">Test Cases:</span>}
-                  <span className="text-sm">
-                    {passedCount} of {totalCount} passed
-                  </span>
-                </div>
+                {allTestCasesPassed ? (
+                  <div className="flex items-center gap-2 text-green-600 font-semibold">
+                    <CheckCircle2 className="h-5 w-5" />
+                    <span>All Tests Passed!</span>
+                  </div>
+                ) : (
+                  <div className="text-md flex justify-between items-center w-full">
+                    {!isCompactMode && <span className="font-bold">Test Cases:</span>}
+                    <span className="text-sm">
+                      {passedCount} of {totalCount} passed
+                    </span>
+                  </div>
+                )}
               </div>
               <div className="flex-1 overflow-y-scroll" ref={testCasesPanelRef}>
                 <TestCaseList

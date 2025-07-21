@@ -10,7 +10,7 @@ export const PostPage = async ({ post }: { post: Post }) => {
 
   return (
     <CenteredLayout className="mt-20">
-      <article className="prose prose-gray dark:prose-invert">
+      <article className="prose-gray dark:prose-invert">
         <div className="space-y-2 not-prose">
           <h1 className="text-primary text-4xl font-extrabold tracking-tight lg:text-5xl lg:leading-[3.5rem]">
             {post.title}

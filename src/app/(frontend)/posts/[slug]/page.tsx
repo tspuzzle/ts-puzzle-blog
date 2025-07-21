@@ -40,7 +40,6 @@ export default async function Post({ params: paramsPromise }: Args) {
   const url = '/posts/' + slug
   const post = await cachedGetPostBySlug({ slug })
 
-  console.log(slug, post)
   if (!post) return <PayloadRedirects url={url} />
 
   return (

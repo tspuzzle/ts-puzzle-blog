@@ -1,7 +1,9 @@
 import { ChallengeBlock } from '@/payload-types'
-import { useState, useTransition } from 'react'
+import { useEffect, useState, useTransition } from 'react'
 import { TestCaseState, TestCaseStatus } from '../model'
 import { compileTypescriptCode } from '@/_frontend/shared/lib/ts-code-compiler'
+
+const getLocalStorageItemKey = (challengeId: string) => `challenge-${challengeId}`
 
 export const useRunTests = ({ challengeBlock }: { challengeBlock: ChallengeBlock }) => {
   const { initialCode, testCases } = challengeBlock
@@ -14,23 +16,40 @@ export const useRunTests = ({ challengeBlock }: { challengeBlock: ChallengeBlock
 
   const [isRunningTests, startTransition] = useTransition()
 
+  useEffect(() => {
+    const rawItem = localStorage.getItem(getLocalStorageItemKey(challengeBlock.id!))
+    if (rawItem) {
+      try {
+        const item = JSON.parse(rawItem)
+        setCode(item.code)
+        setTestCaseStates((testCases || []).map(() => ({ status: TestCaseStatus.PASSED })))
+      } catch (e) {}
+    }
+  }, [challengeBlock, testCases])
+
   const runTests = async () => {
     setTestCaseStates(() => (testCases || []).map(() => ({ status: TestCaseStatus.CHECKING })))
 
     startTransition(async () => {
-      await Promise.all(
-        (testCases || []).map((testCase, i) =>
-          compileTypescriptCode(`${code};${testCase.test}`).then((result) => {
-            setTestCaseStates((states) => {
-              const newState = [...states]
-              newState[i] = {
-                status: result.success ? TestCaseStatus.PASSED : TestCaseStatus.FAILED,
-              }
-              return newState
-            })
-          }),
-        ),
+      const results = await Promise.all(
+        (testCases || []).map((testCase, i) => compileTypescriptCode(`${code};${testCase.test}`)),
       )
+      setTestCaseStates((states) => {
+        return states.map((state, i) => ({
+          ...state,
+          status: results[i].success ? TestCaseStatus.PASSED : TestCaseStatus.FAILED,
+        }))
+      })
+
+      if (results.every((result) => result.success)) {
+        localStorage.setItem(
+          getLocalStorageItemKey(challengeBlock.id!),
+          JSON.stringify({ code, allPassed: true }),
+        )
+      } else {
+        localStorage.removeItem(getLocalStorageItemKey(challengeBlock.id!))
+      }
+
       await new Promise((resolve) => setTimeout(resolve, 300)) // Simulate delay for UI feedback
     })
   }
