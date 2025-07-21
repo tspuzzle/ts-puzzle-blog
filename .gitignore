@@ -5,7 +5,8 @@ node_modules
 .env
 .next
 .vercel
-
+.rollup.cache
+public/widgets
 # Payload default media upload directory
 public/media/
 
