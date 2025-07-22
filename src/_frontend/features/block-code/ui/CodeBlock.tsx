@@ -17,13 +17,16 @@ export const CodeBlock: React.FC<Props> = ({ code, includeLines, language = 'typ
 
   const height = code.split('\n').length * LINE_MULTIPLIER || LINE_MULTIPLIER
   return (
-    <div className="group border rounded overflow-x-auto relative pt-4 bg-white dark:bg-[rgb(30,30,30)]">
+    <div className="group border rounded overflow-x-auto relative p-4  bg-white dark:bg-[rgb(30,30,30)]">
       <Editor
         defaultValue={code}
         language={language || 'typescript'}
         theme={theme === 'light' ? 'vs' : 'vs-dark'}
         height={height}
         options={{
+          folding: false,
+          occurrencesHighlight: 'off',
+          selectionHighlight: false,
           readOnly: true,
           domReadOnly: true,
           renderLineHighlight: 'none',
