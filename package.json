@@ -22,7 +22,7 @@
     "test": "pnpm run test:int && pnpm run test:e2e",
     "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --no-experimental-strip-types\" pnpm exec playwright test --config=playwright.config.ts",
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts",
-    "ci": "pnpm run payload migrate && pnpm run build && pnpm run build:widget"
+    "ci": "pnpm run payload migrate && pnpm run build"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
