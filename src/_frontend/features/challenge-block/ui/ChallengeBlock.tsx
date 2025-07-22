@@ -104,7 +104,7 @@ export const ChallengeBlock: React.FC<Props> = (challengeBlockProps) => {
 
       <div className={cn(isFullScreen ? 'flex-grow min-h-[200px]' : 'h-[400px]')}>
         <ResizablePanelGroup direction="horizontal" key={resetColumnKey}>
-          <ResizablePanel defaultSize={40}>
+          <ResizablePanel defaultSize={40} minSize={15}>
             {/* Attach ref to this inner div */}
             <div className="flex flex-col p-4 h-full">
               <div className="flex justify-between items-center mb-4 flex-shrink-0">
