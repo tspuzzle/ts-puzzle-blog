@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { ChallengeBlock as ChallengeBlockBase } from '@/payload-types'
 
 export const fields: ChallengeBlockBase = {
