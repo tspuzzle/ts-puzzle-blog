@@ -1,4 +1,4 @@
-import { ChallengeBlock } from '@/_frontend/features/challenge-block'
+import { ChallengeBlock } from '@/_frontend/features/block-challenge'
 import React, { useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 import './styles.css'
