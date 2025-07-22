@@ -1,12 +1,18 @@
-import React from 'react'
+import { ChallengeBlock } from '@/_frontend/features/challenge-block'
+import React, { useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
+import './styles.css'
+import { fields } from './data'
 
 const Widget = ({ id }: { id: string }) => {
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', 'light')
+  }, [])
   return (
     <div style={{ border: '1px solid #ccc', padding: 10 }}>
       <strong>Challenge Widget</strong>
       <br />
-      Loaded with ID: {id}
+      <ChallengeBlock {...fields} />
     </div>
   )
 }

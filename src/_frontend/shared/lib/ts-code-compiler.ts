@@ -2,9 +2,9 @@ import ts from 'typescript'
 
 const librariesCache: { [key: string]: string } = {}
 
-const libraryES5 = '/ts-libs/lib.es5.d.ts'
-const libraryDOM = '/ts-libs/lib.dom.d.ts'
-const libraryES2015_Symbol = '/ts-libs/lib.es2015.symbol.d.ts'
+const libraryES5 = `${process.env.NEXT_PUBLIC_SERVER_URL}/ts-libs/lib.es5.d.ts`
+const libraryDOM = `${process.env.NEXT_PUBLIC_SERVER_URL}/ts-libs/lib.dom.d.ts`
+const libraryES2015_Symbol = `${process.env.NEXT_PUBLIC_SERVER_URL}/ts-libs/lib.es2015.symbol.d.ts`
 
 const libraries = {
   ['node_modules/@typescript/lib-es5/ts.ts']: {
