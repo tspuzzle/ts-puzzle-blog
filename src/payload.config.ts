@@ -9,6 +9,8 @@ import { fileURLToPath } from 'url'
 import { Categories } from './_admin/collections/Categories'
 import { Media } from '@/_admin/collections/Media'
 import { Pages } from '@/_admin/collections/Pages'
+import { Challenges } from '@/_admin/collections/Challenges'
+
 import { Posts } from '@/_admin/collections/Posts'
 import { Users } from '@/_admin/collections/Users'
 import { Footer } from '@/Footer/config'
@@ -64,7 +66,7 @@ const paylodConfig = buildConfig({
       connectionString: process.env.DATABASE_URI || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  collections: [Pages, Posts, Media, Categories, Users, Challenges],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [

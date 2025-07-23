@@ -1,25 +1,37 @@
 import { ChallengeBlock } from '@/_frontend/features/block-challenge'
-import React, { useEffect } from 'react'
+import { ChallengeBlock as ChallengeBlockBase } from '@/payload-types'
+import { useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import './styles.css'
-import { fields } from './data'
 
 const Widget = ({ id }: { id: string }) => {
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', 'light')
   }, [])
+
+  const [challenge, setChallenge] = useState<ChallengeBlockBase | null>(null)
+
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/challenges/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setChallenge(data)
+      })
+  }, [id])
+
+  if (!challenge) {
+    return <div>Loading...</div>
+  }
+
   return (
     <div style={{ border: '1px solid #ccc', padding: 10 }}>
-      <strong>Challenge Widget</strong>
-      <br />
-      <ChallengeBlock {...fields} />
+      <ChallengeBlock {...challenge} />
     </div>
   )
 }
 
 // Wait for DOM load
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('Widget script loaded')
   const targets = document.querySelectorAll('[data-script="challenge"]')
   targets.forEach((el) => {
     const id = el.getAttribute('data-id')
