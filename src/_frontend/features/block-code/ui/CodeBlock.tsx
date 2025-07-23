@@ -41,8 +41,6 @@ export const CodeBlock: React.FC<Props> = ({ code, includeLines, language = 'typ
           hideCursorInOverviewRuler: true,
           overviewRulerBorder: false,
           scrollBeyondLastLine: false,
-          selectionHighlight: false,
-
           parameterHints: { enabled: false }, // disables parameter hints
           suggestOnTriggerCharacters: false, // disables auto-suggestions
           hover: { enabled: false }, // disables hover tooltips
