@@ -1,6 +1,9 @@
 import * as migration_20250710_202622_init_schema from './20250710_202622_init_schema';
 import * as migration_20250711_162840_change_media_block from './20250711_162840_change_media_block';
 import * as migration_20250723_131531_challenge_collection from './20250723_131531_challenge_collection';
+import * as migration_20250723_135615_not_required_challenge_fields from './20250723_135615_not_required_challenge_fields';
+import * as migration_20250723_135808_show_description_field from './20250723_135808_show_description_field';
+import * as migration_20250723_140039_hide_description from './20250723_140039_hide_description';
 
 export const migrations = [
   {
@@ -16,6 +19,21 @@ export const migrations = [
   {
     up: migration_20250723_131531_challenge_collection.up,
     down: migration_20250723_131531_challenge_collection.down,
-    name: '20250723_131531_challenge_collection'
+    name: '20250723_131531_challenge_collection',
+  },
+  {
+    up: migration_20250723_135615_not_required_challenge_fields.up,
+    down: migration_20250723_135615_not_required_challenge_fields.down,
+    name: '20250723_135615_not_required_challenge_fields',
+  },
+  {
+    up: migration_20250723_135808_show_description_field.up,
+    down: migration_20250723_135808_show_description_field.down,
+    name: '20250723_135808_show_description_field',
+  },
+  {
+    up: migration_20250723_140039_hide_description.up,
+    down: migration_20250723_140039_hide_description.down,
+    name: '20250723_140039_hide_description'
   },
 ];

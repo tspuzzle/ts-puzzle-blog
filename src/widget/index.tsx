@@ -24,8 +24,8 @@ const Widget = ({ id }: { id: string }) => {
   }
 
   return (
-    <div style={{ border: '1px solid #ccc', padding: 10 }}>
-      <ChallengeBlock {...challenge} />
+    <div>
+      <ChallengeBlock {...challenge} mode="widget" />
     </div>
   )
 }

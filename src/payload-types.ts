@@ -758,8 +758,8 @@ export interface Form {
  */
 export interface Challenge {
   id: number;
-  title: string;
-  description: {
+  title?: string | null;
+  description?: {
     root: {
       type: string;
       children: {
@@ -773,7 +773,8 @@ export interface Challenge {
       version: number;
     };
     [k: string]: unknown;
-  };
+  } | null;
+  hideDescription?: boolean | null;
   initialCode?: string | null;
   testCases?:
     | {
@@ -1384,6 +1385,7 @@ export interface UsersSelect<T extends boolean = true> {
 export interface ChallengesSelect<T extends boolean = true> {
   title?: T;
   description?: T;
+  hideDescription?: T;
   initialCode?: T;
   testCases?:
     | T
@@ -1819,8 +1821,8 @@ export interface CodeBlock {
  * via the `definition` "ChallengeBlock".
  */
 export interface ChallengeBlock {
-  title: string;
-  description: {
+  title?: string | null;
+  description?: {
     root: {
       type: string;
       children: {
@@ -1834,7 +1836,8 @@ export interface ChallengeBlock {
       version: number;
     };
     [k: string]: unknown;
-  };
+  } | null;
+  hideDescription?: boolean | null;
   initialCode?: string | null;
   testCases?:
     | {

@@ -5,13 +5,17 @@ export const challengeBlockFields: Field[] = [
   {
     name: 'title',
     type: 'text',
-    required: true,
   },
   {
     name: 'description',
     type: 'richText',
     editor: limitedLexical,
-    required: true,
+  },
+  {
+    name: 'hideDescription',
+    type: 'checkbox',
+    label: 'Hide description',
+    defaultValue: false,
   },
   {
     name: 'initialCode',

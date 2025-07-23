@@ -27,14 +27,14 @@ import { useFullscreenMode } from '../lib/useFullscreenMode'
 import { useRunTests } from '../lib/useRunTests'
 import { ChallengeBlock as ChallengeBlockProps, TestCaseStatus } from '../model'
 
-type Props = ChallengeBlockProps
+type Props = ChallengeBlockProps & { mode?: 'widget' | 'page' }
 
 export const ChallengeBlock: React.FC<Props> = (challengeBlockProps) => {
-  const { description, title, testCases } = challengeBlockProps
-  const [showDescription, setShowDescription] = React.useState(true)
+  const { description, title, testCases, mode = 'page', hideDescription } = challengeBlockProps
+  const [showDescription, setShowDescription] = useState(true)
 
   const { isCompactMode, setIsCompactMode, testCasesPanelRef } = useCompactMode()
-  const { isFullScreen, setIsFullScreen } = useFullscreenMode()
+  const { isFullScreen, setIsFullScreen } = useFullscreenMode({ mode })
 
   const { code, setCode, testCaseStates, runTests, isRunningTests } = useRunTests({
     challengeBlock: challengeBlockProps,
@@ -61,46 +61,50 @@ export const ChallengeBlock: React.FC<Props> = (challengeBlockProps) => {
         allTestCasesPassed && 'border-green-500 bg-green-50',
       )}
     >
-      <div className="flex flex-row items-center justify-between flex-shrink-0 p-4">
-        <div
-          className={cn(
-            'text-xl font-bold flex items-center gap-2 text-primary m-0',
-            allTestCasesPassed && 'text-green-500',
-          )}
-        >
-          <Code className="h-6 w-6" />
-          {title} {allTestCasesPassed && <CheckCircle2 className="h-5 w-5" />}
+      {mode === 'page' && (
+        <div className="flex flex-row items-center justify-between flex-shrink-0 p-4">
+          <div
+            className={cn(
+              'text-xl font-bold flex items-center gap-2 text-primary m-0',
+              allTestCasesPassed && 'text-green-500',
+            )}
+          >
+            <Code className="h-6 w-6" />
+            {title} {allTestCasesPassed && <CheckCircle2 className="h-5 w-5" />}
+          </div>
+          <Button variant="ghost" size="icon" onClick={() => setIsFullScreen(!isFullScreen)}>
+            {isFullScreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
+            <span className="sr-only">{isFullScreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}</span>
+          </Button>
         </div>
-        <Button variant="ghost" size="icon" onClick={() => setIsFullScreen(!isFullScreen)}>
-          {isFullScreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
-          <span className="sr-only">{isFullScreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}</span>
-        </Button>
-      </div>
+      )}
 
       {/* Task Description */}
-      <div className={cn('p-4 pt-0')}>
-        <div className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 flex-shrink-0 rounded">
-          <div className="flex flex-row items-center justify-between p-4">
-            <div className="text-md font-bold m-0">Task Description</div>
-            <Button
-              variant="ghost"
-              size="clear"
-              className="mt-0 h-5 w-5"
-              onClick={() => setShowDescription(!showDescription)}
-            >
-              {showDescription ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-              <span className="sr-only">
-                {showDescription ? 'Hide Description' : 'Show Description'}
-              </span>
-            </Button>
-          </div>
-          {showDescription && (
-            <div className={cn('p-4 pt-0', isFullScreen && 'max-h-[150px] overflow-y-scroll')}>
-              <RichText data={description} enableGutter={false} />
+      {description && !hideDescription && (
+        <div className={cn('p-4 pt-0')}>
+          <div className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 flex-shrink-0 rounded">
+            <div className="flex flex-row items-center justify-between p-4">
+              <div className="text-md font-bold m-0">Task Description</div>
+              <Button
+                variant="ghost"
+                size="clear"
+                className="mt-0 h-5 w-5"
+                onClick={() => setShowDescription(!showDescription)}
+              >
+                {showDescription ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                <span className="sr-only">
+                  {showDescription ? 'Hide Description' : 'Show Description'}
+                </span>
+              </Button>
             </div>
-          )}
+            {showDescription && (
+              <div className={cn('p-4 pt-0', isFullScreen && 'max-h-[150px] overflow-y-scroll')}>
+                <RichText data={description} enableGutter={false} />
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       <div className={cn(isFullScreen ? 'flex-grow min-h-[200px]' : 'h-[400px]')}>
         <ResizablePanelGroup direction="horizontal" key={resetColumnKey}>
