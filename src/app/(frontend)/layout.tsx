@@ -29,7 +29,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <InitTheme />
           <Header />
           {children}
-          <Footer />
+          {/* <Footer /> */}
         </Providers>
       </body>
     </html>

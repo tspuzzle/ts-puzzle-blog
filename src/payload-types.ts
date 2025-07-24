@@ -812,6 +812,8 @@ export interface Challenge {
         id?: string | null;
       }[]
     | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1395,6 +1397,8 @@ export interface ChallengesSelect<T extends boolean = true> {
         test?: T;
         id?: T;
       };
+  slug?: T;
+  slugLock?: T;
   updatedAt?: T;
   createdAt?: T;
 }

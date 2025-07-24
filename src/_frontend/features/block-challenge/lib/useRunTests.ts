@@ -3,9 +3,15 @@ import { useEffect, useState, useTransition } from 'react'
 import { TestCaseState, TestCaseStatus } from '../model'
 import { compileTypescriptCode } from '@/_frontend/shared/lib/ts-code-compiler'
 
-const getLocalStorageItemKey = (challengeId: string) => `challenge-${challengeId}`
+const getLocalStorageItemKey = (challengeId: string | number) => `challenge-${challengeId}`
 
-export const useRunTests = ({ challengeBlock }: { challengeBlock: ChallengeBlock }) => {
+export const useRunTests = ({
+  challengeBlock,
+}: {
+  challengeBlock: Omit<ChallengeBlock, 'blockType' | 'id'> & {
+    id?: number | string | null | undefined
+  }
+}) => {
   const { initialCode, testCases } = challengeBlock
 
   const [code, setCode] = useState(initialCode || '')

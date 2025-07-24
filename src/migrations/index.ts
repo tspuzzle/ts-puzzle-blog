@@ -4,6 +4,7 @@ import * as migration_20250723_131531_challenge_collection from './20250723_1315
 import * as migration_20250723_135615_not_required_challenge_fields from './20250723_135615_not_required_challenge_fields';
 import * as migration_20250723_135808_show_description_field from './20250723_135808_show_description_field';
 import * as migration_20250723_140039_hide_description from './20250723_140039_hide_description';
+import * as migration_20250724_155235_challenge_slug from './20250724_155235_challenge_slug';
 
 export const migrations = [
   {
@@ -34,6 +35,11 @@ export const migrations = [
   {
     up: migration_20250723_140039_hide_description.up,
     down: migration_20250723_140039_hide_description.down,
-    name: '20250723_140039_hide_description'
+    name: '20250723_140039_hide_description',
+  },
+  {
+    up: migration_20250724_155235_challenge_slug.up,
+    down: migration_20250724_155235_challenge_slug.down,
+    name: '20250724_155235_challenge_slug'
   },
 ];
