@@ -4,6 +4,7 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { cache } from 'react'
 
+/*
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
   const challenges = await payload.find({
@@ -23,6 +24,7 @@ export async function generateStaticParams() {
 
   return params
 }
+  */
 
 type Args = {
   params: Promise<{
