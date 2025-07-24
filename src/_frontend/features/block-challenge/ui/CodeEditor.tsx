@@ -22,13 +22,14 @@ export function CodeEditor({ value, onChange, className }: CodeEditorProps) {
   )
 
   return (
-    <div className="bg-grey-50 text-code flex-1 bg-white dark:bg-[rgb(30,30,30)]">
+    <div className="bg-grey-50 text-code flex-1 bg-white dark:bg-[rgb(30,30,30)] overflow-y-scroll">
       <Editor
-        height={height}
+        //height={height}
         value={value}
         language={'typescript'}
         theme={theme === 'light' ? 'vs' : 'vs-dark'}
         options={{
+          automaticLayout: true,
           minimap: { enabled: false },
           formatOnType: true,
           fontSize: 16,
