@@ -27,7 +27,7 @@ import { useFullscreenMode } from '../lib/useFullscreenMode'
 import { useRunTests } from '../lib/useRunTests'
 import { ChallengeBlock as ChallengeBlockProps, TestCaseStatus } from '../model'
 
-type Props = ChallengeBlockProps & { mode?: 'widget' | 'page' }
+type Props = ChallengeBlockProps & { mode?: 'widget' | 'page'; slug?: string }
 
 export const ChallengeBlock: React.FC<Props> = (challengeBlockProps) => {
   const { description, title, testCases, mode = 'page', hideDescription } = challengeBlockProps
@@ -61,6 +61,20 @@ export const ChallengeBlock: React.FC<Props> = (challengeBlockProps) => {
         allTestCasesPassed && 'border-green-500 bg-green-50',
       )}
     >
+      {mode === 'widget' && (
+        <div className="bg-primary text-white text-[12px] px-2 py-0.5">
+          <span>
+            Powered By TypeScript Puzzle: go to{' '}
+            <a
+              className="underline"
+              target="_blank"
+              href={`${process.env.NEXT_PUBLIC_SERVER_URL}/challenges/${challengeBlockProps.slug}`}
+            >
+              the challenge
+            </a>
+          </span>
+        </div>
+      )}
       {mode === 'page' && (
         <div className="flex flex-row items-center justify-between flex-shrink-0 p-4">
           <div

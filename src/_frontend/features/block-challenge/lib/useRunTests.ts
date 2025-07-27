@@ -7,10 +7,12 @@ const getLocalStorageItemKey = (challengeId: string | number) => `challenge-${ch
 
 export const useRunTests = ({
   challengeBlock,
+  beforeRunTests,
 }: {
   challengeBlock: Omit<ChallengeBlock, 'blockType' | 'id'> & {
     id?: number | string | null | undefined
   }
+  beforeRunTests?: () => void
 }) => {
   const { initialCode, testCases } = challengeBlock
 
@@ -34,6 +36,7 @@ export const useRunTests = ({
   }, [challengeBlock, testCases])
 
   const runTests = async () => {
+    beforeRunTests?.()
     setTestCaseStates(() => (testCases || []).map(() => ({ status: TestCaseStatus.CHECKING })))
 
     startTransition(async () => {
