@@ -18,6 +18,7 @@ import { Header } from '@/Header/config'
 import { plugins } from '@/_admin/plugins'
 import { defaultLexical } from '@/_admin/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
+import { Accounts } from './_admin/collections/Accounts'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -31,6 +32,13 @@ const paylodConfig = buildConfig({
       // The `BeforeDashboard` component renders the 'welcome' block that you see after logging into your admin panel.
       // Feel free to delete this at any time. Simply remove the line below.
       beforeDashboard: ['@/components/BeforeDashboard'],
+
+      views: {
+        login: {
+          Component: '@/_admin/views/Login',
+          path: '/signin',
+        },
+      },
     },
     importMap: {
       baseDir: path.resolve(dirname),
@@ -66,7 +74,7 @@ const paylodConfig = buildConfig({
       connectionString: process.env.DATABASE_URI || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users, Challenges],
+  collections: [Pages, Posts, Media, Categories, Users, Challenges, Accounts],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [
