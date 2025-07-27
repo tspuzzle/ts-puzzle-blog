@@ -50,7 +50,7 @@ export const CodeBlock: React.FC<Props> = ({ code, includeLines, language = 'typ
           scrollbar: {
             alwaysConsumeMouseWheel: false,
             vertical: 'hidden',
-            horizontal: 'hidden',
+            //horizontal: 'hidden',
           },
         }}
       />

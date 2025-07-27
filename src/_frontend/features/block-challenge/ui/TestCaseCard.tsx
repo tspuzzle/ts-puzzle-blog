@@ -58,7 +58,7 @@ export function TestCaseCard({
   return (
     <div
       className={cn(
-        'w-full transition-all duration-300 relative rounded border border-l-4',
+        'w-full transition-all duration-300 relative rounded border border-l-4 max-w-full overflow-hidden',
         isCompact ? 'py-0.5 px-1 max-w-xs' : 'pl-6', // Added max-w-xs here
         borderColorClass,
       )}
