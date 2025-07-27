@@ -33,6 +33,7 @@ export function CodeEditor({ value, onChange, className }: CodeEditorProps) {
           minimap: { enabled: false },
           formatOnType: true,
           fontSize: 16,
+          lineNumbersMinChars: 2,
           //fontFamily: jetBrains.style.fontFamily,
           scrollBeyondLastLine: false,
 
