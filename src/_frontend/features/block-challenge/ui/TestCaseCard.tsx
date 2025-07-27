@@ -59,7 +59,7 @@ export function TestCaseCard({
     <div
       className={cn(
         'w-full transition-all duration-300 relative rounded border border-l-4',
-        isCompact ? 'py-1 px-2 max-w-xs' : 'pl-6', // Added max-w-xs here
+        isCompact ? 'py-0.5 px-1 max-w-xs' : 'pl-6', // Added max-w-xs here
         borderColorClass,
       )}
     >
@@ -78,8 +78,11 @@ export function TestCaseCard({
       )}
 
       {isCompact && (
-        <div className={cn('flex flex-row items-center justify-between p-2')}>
-          <div className={cn('font-medium text-sm')}># {index + 1}</div>
+        <div className={cn('flex flex-row items-center justify-between p-1 py-1 pl-1')}>
+          <div className={cn('font-medium text-sm')}>
+            <span className="text-[10px]">#</span>
+            {index + 1}
+          </div>
           <div className="flex items-center gap-2">
             {statusIcon}
             {!isCompact && <span className={cn('text-xs', statusTextClass)}>{statusText}</span>}

@@ -1,5 +1,5 @@
 'use client'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 import { cn } from '@/_frontend/shared/lib/cn'
 import { Button } from '@/_frontend/shared/ui/button'
@@ -26,14 +26,19 @@ import { useCompactMode } from '../lib/useCompactMode'
 import { useFullscreenMode } from '../lib/useFullscreenMode'
 import { useRunTests } from '../lib/useRunTests'
 import { ChallengeBlock as ChallengeBlockProps, TestCaseStatus } from '../model'
+import { ImperativePanelGroupHandle } from 'react-resizable-panels'
+import { useMeasure } from 'react-use'
+import { set } from 'date-fns'
 
 type Props = ChallengeBlockProps & { mode?: 'widget' | 'page'; slug?: string }
+
+const MIN_LEFT_PANEL_WIDTH = 100
 
 export const ChallengeBlock: React.FC<Props> = (challengeBlockProps) => {
   const { description, title, testCases, mode = 'page', hideDescription } = challengeBlockProps
   const [showDescription, setShowDescription] = useState(true)
 
-  const { isCompactMode, setIsCompactMode, testCasesPanelRef } = useCompactMode()
+  //const { isCompactMode, setIsCompactMode, testCasesPanelRef } = useCompactMode()
   const { isFullScreen, setIsFullScreen } = useFullscreenMode({ mode })
 
   const { code, setCode, testCaseStates, runTests, isRunningTests } = useRunTests({
@@ -48,9 +53,29 @@ export const ChallengeBlock: React.FC<Props> = (challengeBlockProps) => {
     [testCaseStates],
   )
 
-  const [resetColumnKey, setResetColumnKey] = useState(0)
-
   const allTestCasesPassed = totalCount === passedCount
+
+  const [panelDivRef, { width: panelWidth }] = useMeasure<HTMLDivElement>()
+
+  const panelApiRef = useRef<ImperativePanelGroupHandle>(null)
+
+  const [minLeftPanelWidth, setMinLeftPanelWidth] = useState(0)
+  useEffect(() => {
+    if (panelWidth !== 0) {
+      setMinLeftPanelWidth((MIN_LEFT_PANEL_WIDTH * 100) / panelWidth)
+    }
+  }, [panelWidth])
+
+  const [isCompactMode, setIsCompactMode] = useState(false)
+
+  const [panelLeftDivRef, { width: leftPanelWidth }] = useMeasure<HTMLDivElement>()
+
+  useEffect(() => {
+    if (leftPanelWidth !== 0) {
+      setIsCompactMode(() => leftPanelWidth < 150)
+    }
+  }, [leftPanelWidth])
+
   return (
     <div
       className={cn(
@@ -120,9 +145,9 @@ export const ChallengeBlock: React.FC<Props> = (challengeBlockProps) => {
         </div>
       )}
 
-      <div className={cn(isFullScreen ? 'flex-grow min-h-[200px]' : 'h-[400px]')}>
-        <ResizablePanelGroup direction="horizontal" key={resetColumnKey}>
-          <ResizablePanel defaultSize={40} minSize={15}>
+      <div className={cn(isFullScreen ? 'flex-grow min-h-[200px]' : 'h-[400px]')} ref={panelDivRef}>
+        <ResizablePanelGroup direction="horizontal" ref={panelApiRef}>
+          <ResizablePanel defaultSize={40} minSize={minLeftPanelWidth}>
             {/* Attach ref to this inner div */}
             <div className="flex flex-col p-4 h-full">
               <div className="flex justify-between items-center mb-4 flex-shrink-0">
@@ -140,7 +165,7 @@ export const ChallengeBlock: React.FC<Props> = (challengeBlockProps) => {
                   </div>
                 )}
               </div>
-              <div className="flex-1 overflow-y-scroll" ref={testCasesPanelRef}>
+              <div className="flex-1 overflow-y-scroll" ref={panelLeftDivRef}>
                 <TestCaseList
                   testCases={testCases || []}
                   testCaseStates={testCaseStates}
@@ -158,11 +183,16 @@ export const ChallengeBlock: React.FC<Props> = (challengeBlockProps) => {
                   variant="ghost"
                   size="clear"
                   onClick={() => {
-                    setResetColumnKey((prev) => prev + 1)
-                    setIsCompactMode(false)
+                    if (isCompactMode) {
+                      setIsCompactMode(false)
+                      panelApiRef.current?.setLayout([40, 60])
+                    } else {
+                      setIsCompactMode(true)
+                      panelApiRef.current?.setLayout([minLeftPanelWidth, 100 - minLeftPanelWidth])
+                    }
                   }}
                 >
-                  {isCompactMode ? (
+                  {!isCompactMode ? (
                     <ChevronLeft className="h-4 w-4" />
                   ) : (
                     <ChevronRight className="h-4 w-4" />
