@@ -35,6 +35,56 @@ export type CompileResult = {
   errors: string[]
 }
 
+export const calculateType = async (code: string) => {
+  await populateTypescriptLibrariesCache()
+  const fileName = 'file.ts'
+
+  // Create a compiler host
+  const compilerHost: ts.CompilerHost = {
+    fileExists: () => true,
+    readFile: () => '',
+    getSourceFile: (filename) => {
+      if (filename === fileName) {
+        return ts.createSourceFile(filename, code, ts.ScriptTarget.ES5)
+      }
+      if (filename in librariesCache) {
+        return ts.createSourceFile(filename, librariesCache[filename], ts.ScriptTarget.ES2015)
+      }
+      throw new Error(`File not found: ${filename}`)
+    },
+    getDefaultLibFileName: () => 'lib.d.ts',
+    writeFile: () => {},
+    getCurrentDirectory: () => '',
+    useCaseSensitiveFileNames: () => true,
+    getCanonicalFileName: (fileName) => fileName,
+    getNewLine: () => '\n',
+  }
+
+  // Create the program for checking the code with appropriate lib (including Array, String, etc.)
+  const program = ts.createProgram(
+    [fileName],
+    {
+      // Include the default TypeScript libraries (e.g., `esnext`, `dom`, `es2015`, etc.)
+      lib: ['lib.es5.ts', 'lib.dom.ts', 'lib.es2015.symbol.ts'], // or ['esnext', 'es2015'] for built-in global types
+    },
+    compilerHost,
+  )
+  const checker = program.getTypeChecker()
+  const sourceFile = program.getSourceFile(fileName)
+  let resolvedTypeString: string | undefined
+
+  if (sourceFile) {
+    ts.forEachChild(sourceFile, (node) => {
+      if (ts.isTypeAliasDeclaration(node) && node.name.text === 'T') {
+        const type = checker.getTypeFromTypeNode(node.type)
+        resolvedTypeString = checker.typeToString(type)
+      }
+    })
+  }
+
+  return resolvedTypeString
+}
+
 export async function compileTypescriptCode(code: string): Promise<CompileResult> {
   await populateTypescriptLibrariesCache()
   const fileName = 'file.ts'
