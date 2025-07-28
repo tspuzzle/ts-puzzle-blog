@@ -388,6 +388,7 @@ export interface User {
   image?: string | null;
   emailVerified?: string | null;
   password?: string | null;
+  role?: ('user' | 'admin') | null;
   accounts?: {
     docs?: (number | Account)[];
     hasNextPage?: boolean;
@@ -1407,6 +1408,7 @@ export interface UsersSelect<T extends boolean = true> {
   image?: T;
   emailVerified?: T;
   password?: T;
+  role?: T;
   accounts?: T;
   updatedAt?: T;
   createdAt?: T;

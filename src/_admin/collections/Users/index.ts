@@ -26,6 +26,14 @@ export const Users: CollectionConfig = {
       },
     ],
   },
+  access: {
+    admin: ({ req: { user } }) => {
+      if (user && user.role === 'admin') {
+        return true
+      }
+      return false
+    },
+  },
   endpoints: [
     {
       path: '/logout',
@@ -44,6 +52,7 @@ export const Users: CollectionConfig = {
     { name: 'image', type: 'text' },
     { name: 'emailVerified', type: 'date' },
     { name: 'password', type: 'text', hidden: true },
+    { name: 'role', type: 'select', options: ['user', 'admin'], defaultValue: 'user' },
     {
       name: 'accounts',
       type: 'join',

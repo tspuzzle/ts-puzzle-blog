@@ -9,6 +9,7 @@ import * as React from 'react'
 import { cn } from '../lib/cn'
 import { Button } from './button'
 import { MobileNav } from './mobile-nav'
+import { UserSessionButtons } from '@/_frontend/entites/auth/ui/UserSessionButtons'
 
 export function Header() {
   const [isScrolled, setIsScrolled] = React.useState(false)
@@ -121,10 +122,15 @@ export function Header() {
             {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
             <span className="sr-only">Toggle theme</span>
           </Button>
+          <UserSessionButtons />
+
+          {/*
           <Avatar className="h-8 w-8">
             <AvatarImage src="/placeholder-user.jpg" alt="@username" />
             <AvatarFallback>JD</AvatarFallback>
           </Avatar>
+          */}
+
           <MobileNav />
         </div>
       </div>
