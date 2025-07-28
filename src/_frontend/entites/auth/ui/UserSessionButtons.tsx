@@ -6,11 +6,13 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/_frontend/shared/ui/dropdown-menu'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { signOut } from 'next-auth/react'
+import { LogOut, User } from 'lucide-react'
 
 export const UserSessionButtons = () => {
   const { data: session, status } = useSession()
@@ -18,6 +20,8 @@ export const UserSessionButtons = () => {
   if (status === 'loading') {
     return null
   }
+
+  console.log(session)
   return (
     <div>
       {!session && (
@@ -29,14 +33,20 @@ export const UserSessionButtons = () => {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Avatar className="h-8 w-8 cursor-pointer">
-              <AvatarImage src="/placeholder-user.jpg" alt="@username" />
+              <AvatarImage src={session?.user?.image || undefined} alt="@username" />
               <AvatarFallback>JD</AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => {}}>Profile</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => {}}>Dark</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => signOut()}>Logout</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => {}}>
+              <User />
+              Profile
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => signOut()}>
+              <LogOut />
+              Logout
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )}
