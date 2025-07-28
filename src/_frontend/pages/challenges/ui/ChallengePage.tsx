@@ -45,7 +45,7 @@ export const ChallengePage = ({ challenge }: { challenge: Challenge }) => {
   }, [panelLeftWidth])
 
   return (
-    <div className="flex h-[calc(100vh-80px)] w-full flex-col mt-20" ref={panelContainerRef}>
+    <div className="flex h-[calc(100vh-80px)] w-full flex-col" ref={panelContainerRef}>
       <div className="flex-grow overflow-hidden">
         <ResizablePanelGroup
           direction={'horizontal'}

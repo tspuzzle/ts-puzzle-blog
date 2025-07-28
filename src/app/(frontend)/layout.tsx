@@ -28,7 +28,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <Providers>
           <InitTheme />
           <Header />
-          {children}
+          <main className="mt-20">{children}</main>
           {/* <Footer /> */}
         </Providers>
       </body>
