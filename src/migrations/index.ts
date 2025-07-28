@@ -8,6 +8,7 @@ import * as migration_20250724_155235_challenge_slug from './20250724_155235_cha
 import * as migration_20250727_203151_user_auth from './20250727_203151_user_auth';
 import * as migration_20250728_120201_add_tags from './20250728_120201_add_tags';
 import * as migration_20250728_151727_difficultu_required from './20250728_151727_difficultu_required';
+import * as migration_20250728_184842_add_role from './20250728_184842_add_role';
 
 export const migrations = [
   {
@@ -58,6 +59,11 @@ export const migrations = [
   {
     up: migration_20250728_151727_difficultu_required.up,
     down: migration_20250728_151727_difficultu_required.down,
-    name: '20250728_151727_difficultu_required'
+    name: '20250728_151727_difficultu_required',
+  },
+  {
+    up: migration_20250728_184842_add_role.up,
+    down: migration_20250728_184842_add_role.down,
+    name: '20250728_184842_add_role'
   },
 ];
