@@ -831,7 +831,7 @@ export interface Challenge {
     | null;
   slug?: string | null;
   slugLock?: boolean | null;
-  difficulty?: ('easy' | 'medium' | 'hard' | 'extreme') | null;
+  difficulty: 'easy' | 'medium' | 'hard' | 'extreme';
   tags?: (number | Tag)[] | null;
   visible?: boolean | null;
   updatedAt: string;

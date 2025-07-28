@@ -1,30 +1,10 @@
-import Link from 'next/link'
+import { BadgeDifficulty } from '@/_frontend/shared/ui/badge-difficulty'
+import { BadgeTag } from '@/_frontend/shared/ui/badge-tag'
 import { Card, CardContent, CardHeader, CardTitle } from '@/_frontend/shared/ui/card'
-import { Badge } from '@/_frontend/shared/ui/badge'
-import { cn } from '@/_frontend/shared/lib/cn'
 import { Challenge, Tag } from '@/payload-types'
-
-const difficultyConfig = {
-  easy: {
-    label: 'Easy',
-    className: 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300',
-  },
-  medium: {
-    label: 'Medium',
-    className: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300',
-  },
-  hard: {
-    label: 'Hard',
-    className: 'bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300',
-  },
-  extreme: {
-    label: 'Extreme',
-    className: 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300',
-  },
-}
+import Link from 'next/link'
 
 export function ChallengeCard({ challenge }: { challenge: Challenge }) {
-  const difficultyInfo = difficultyConfig[challenge.difficulty || 'easy']
   const tags: string[] = ((challenge.tags || []) as Tag[]).map((tag) => tag.title || tag.key || '')
   return (
     <Link href={`/challenges/${challenge.slug}`} className="block group">
@@ -34,24 +14,13 @@ export function ChallengeCard({ challenge }: { challenge: Challenge }) {
             <CardTitle className="text-xl font-bold group-hover:text-primary transition-colors line-clamp-2">
               {challenge.title}
             </CardTitle>
-            <Badge
-              variant="secondary"
-              className={cn('shrink-0 font-medium', difficultyInfo.className)}
-            >
-              {difficultyInfo.label}
-            </Badge>
+            <BadgeDifficulty difficulty={challenge.difficulty} />
           </div>
         </CardHeader>
         <CardContent className="pt-0">
           <div className="flex flex-wrap gap-1.5">
             {tags.map((tag) => (
-              <Badge
-                key={tag}
-                variant="outline"
-                className="text-xs px-2 py-0.5 bg-primary/5 border-primary/20 text-primary hover:bg-primary/10 transition-colors"
-              >
-                {tag}
-              </Badge>
+              <BadgeTag key={tag}>{tag}</BadgeTag>
             ))}
           </div>
         </CardContent>

@@ -20,6 +20,7 @@ export const Challenges: CollectionConfig = {
         { label: 'Extreme', value: 'extreme' },
       ],
       defaultValue: 'easy',
+      required: true,
     },
     {
       name: 'tags',

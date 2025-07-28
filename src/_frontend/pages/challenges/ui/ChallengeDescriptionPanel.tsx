@@ -6,6 +6,9 @@ import RichText from '@/_frontend/shared/ui/rich-text'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/_frontend/shared/ui/tabs'
 import { FileText, FlaskConical } from 'lucide-react' // Add Swords icon
 import { Challenge } from '../model'
+import { BadgeDifficulty } from '@/_frontend/shared/ui/badge-difficulty'
+import { BadgeTag } from '@/_frontend/shared/ui/badge-tag'
+import { Tag } from '@/payload-types'
 
 export const ChallengeDescriptionPanel = ({
   challenge,
@@ -22,6 +25,7 @@ export const ChallengeDescriptionPanel = ({
   isCollapsedPanel?: boolean
   ref?: React.Ref<HTMLDivElement>
 }) => {
+  const tags = (challenge.tags || []) as Tag[]
   return (
     <Tabs
       value={currentTab}
@@ -74,6 +78,12 @@ export const ChallengeDescriptionPanel = ({
         <div className="flex-1 overflow-scroll">
           <TabsContent value="description" className="mt-6">
             <h1 className="text-4xl font-bold mb-4">{challenge.title}</h1>
+            <div className="mb-6 flex flex-wrap gap-2">
+              <BadgeDifficulty difficulty={challenge.difficulty} />
+              {tags.map((t) => (
+                <BadgeTag key={t.title}>{t.title}</BadgeTag>
+              ))}
+            </div>
             {challenge.description && (
               <RichText data={challenge.description} enableGutter={false} />
             )}

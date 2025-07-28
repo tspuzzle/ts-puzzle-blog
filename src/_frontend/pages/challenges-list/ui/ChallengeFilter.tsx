@@ -1,36 +1,19 @@
 import { cn } from '@/_frontend/shared/lib/cn'
 import { Badge } from '@/_frontend/shared/ui/badge'
+import {
+  BadgeDifficulty,
+  DifficultyType,
+  DifficultyKeys as difficultyKeys,
+} from '@/_frontend/shared/ui/badge-difficulty'
+import { BadgeTag } from '@/_frontend/shared/ui/badge-tag'
 import { Button } from '@/_frontend/shared/ui/button'
 import { Challenge, Tag } from '@/payload-types'
 import { X, ChevronDown, ChevronUp } from 'lucide-react' // Import ChevronDown and ChevronUp
 import { useState } from 'react'
 
-const difficultyConfig = {
-  easy: {
-    label: 'Easy',
-    className:
-      'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-900/30',
-  },
-  medium: {
-    label: 'Medium',
-    className:
-      'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300 hover:bg-yellow-200 dark:hover:bg-yellow-900/30',
-  },
-  hard: {
-    label: 'Hard',
-    className:
-      'bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300 hover:bg-orange-200 dark:hover:bg-orange-900/30',
-  },
-  extreme: {
-    label: 'Extreme',
-    className:
-      'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-900/30',
-  },
-}
-
 export type ChallengeFilterOptions = {
   selectedTags: string[]
-  selectedDifficulties: string[]
+  selectedDifficulties: DifficultyType[]
 }
 
 export const ChallengeFilter = ({
@@ -48,7 +31,7 @@ export const ChallengeFilter = ({
 
   const [isCollapsed, setCollapsed] = useState<boolean>(true) // State to manage dropdown visibility
 
-  const toggleDifficulty = (difficulty: string) => {
+  const toggleDifficulty = (difficulty: DifficultyType) => {
     setFilter((prev) => {
       const isSelected = prev.selectedDifficulties.includes(difficulty)
       return {
@@ -135,7 +118,7 @@ export const ChallengeFilter = ({
                 )}
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                {Object.entries(difficultyConfig).map(([difficulty, config]) => {
+                {difficultyKeys.map((difficulty) => {
                   const isSelected = selectedDifficulties.includes(difficulty)
                   const challengeCount = challenges.filter(
                     (c) => c.difficulty === difficulty,
@@ -152,17 +135,14 @@ export const ChallengeFilter = ({
                           : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600',
                       )}
                     >
-                      <Badge
-                        variant="secondary"
+                      <BadgeDifficulty
+                        difficulty={difficulty}
                         className={cn(
-                          'mb-1 pointer-events-none',
-                          isSelected
-                            ? config.className
-                            : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400',
+                          !isSelected &&
+                            'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400',
                         )}
-                      >
-                        {config.label}
-                      </Badge>
+                      />
+
                       <span className="text-xs text-muted-foreground">
                         {challengeCount} challenges
                       </span>
@@ -229,25 +209,10 @@ export const ChallengeFilter = ({
                   <span className="font-medium">Active filters:</span>
                   <div className="flex flex-wrap items-center gap-1">
                     {selectedDifficulties.map((difficulty) => (
-                      <Badge
-                        key={difficulty}
-                        variant="secondary"
-                        className={cn(
-                          'text-xs',
-                          difficultyConfig[difficulty as keyof typeof difficultyConfig].className,
-                        )}
-                      >
-                        {difficultyConfig[difficulty as keyof typeof difficultyConfig].label}
-                      </Badge>
+                      <BadgeDifficulty difficulty={difficulty} key={difficulty} />
                     ))}
                     {selectedTags.map((tag) => (
-                      <Badge
-                        key={tag}
-                        variant="outline"
-                        className="text-xs bg-primary/10 border-primary/20 text-primary"
-                      >
-                        {tag}
-                      </Badge>
+                      <BadgeTag key={tag}>{tag}</BadgeTag>
                     ))}
                   </div>
                 </div>
