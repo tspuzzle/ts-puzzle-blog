@@ -6,7 +6,6 @@ export const getChallenges = async () => {
 
   const result = await payload.find({
     collection: 'challenges',
-    limit: 1,
     pagination: false,
   })
 
