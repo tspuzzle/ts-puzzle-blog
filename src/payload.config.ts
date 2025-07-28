@@ -10,6 +10,7 @@ import { Categories } from './_admin/collections/Categories'
 import { Media } from '@/_admin/collections/Media'
 import { Pages } from '@/_admin/collections/Pages'
 import { Challenges } from '@/_admin/collections/Challenges'
+import { Tags } from '@/_admin/collections/Tags'
 
 import { Posts } from '@/_admin/collections/Posts'
 import { Users } from '@/_admin/collections/Users'
@@ -74,7 +75,7 @@ const paylodConfig = buildConfig({
       connectionString: process.env.DATABASE_URI || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users, Challenges, Accounts],
+  collections: [Pages, Posts, Media, Categories, Users, Challenges, Accounts, Tags],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [

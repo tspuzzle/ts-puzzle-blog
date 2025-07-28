@@ -74,6 +74,7 @@ export interface Config {
     users: User;
     challenges: Challenge;
     accounts: Account;
+    tags: Tag;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -96,6 +97,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     challenges: ChallengesSelect<false> | ChallengesSelect<true>;
     accounts: AccountsSelect<false> | AccountsSelect<true>;
+    tags: TagsSelect<false> | TagsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -829,6 +831,20 @@ export interface Challenge {
     | null;
   slug?: string | null;
   slugLock?: boolean | null;
+  difficulty?: ('easy' | 'medium' | 'hard' | 'extreme') | null;
+  tags?: (number | Tag)[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags".
+ */
+export interface Tag {
+  id: number;
+  key: string;
+  title: string;
+  group?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1032,6 +1048,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'accounts';
         value: number | Account;
+      } | null)
+    | ({
+        relationTo: 'tags';
+        value: number | Tag;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1409,6 +1429,8 @@ export interface ChallengesSelect<T extends boolean = true> {
       };
   slug?: T;
   slugLock?: T;
+  difficulty?: T;
+  tags?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1423,6 +1445,17 @@ export interface AccountsSelect<T extends boolean = true> {
   refreshToken?: T;
   accessToken?: T;
   user?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags_select".
+ */
+export interface TagsSelect<T extends boolean = true> {
+  key?: T;
+  title?: T;
+  group?: T;
   updatedAt?: T;
   createdAt?: T;
 }

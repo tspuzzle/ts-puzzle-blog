@@ -7,6 +7,26 @@ export const Challenges: CollectionConfig = {
   access: {
     read: () => true, // Public read access
   },
-  fields: [...challengeBlockFields, ...slugField()],
+  fields: [
+    ...challengeBlockFields,
+    ...slugField(),
+    {
+      name: 'difficulty',
+      type: 'select',
+      options: [
+        { label: 'Easy', value: 'easy' },
+        { label: 'Medium', value: 'medium' },
+        { label: 'Hard', value: 'hard' },
+        { label: 'Extreme', value: 'extreme' },
+      ],
+      defaultValue: 'easy',
+    },
+    {
+      name: 'tags',
+      type: 'relationship',
+      relationTo: 'tags',
+      hasMany: true,
+    },
+  ],
   timestamps: true,
 }

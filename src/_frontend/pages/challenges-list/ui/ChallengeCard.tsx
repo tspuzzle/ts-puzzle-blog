@@ -2,20 +2,7 @@ import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/_frontend/shared/ui/card'
 import { Badge } from '@/_frontend/shared/ui/badge'
 import { cn } from '@/_frontend/shared/lib/cn'
-
-interface Challenge {
-  id: string
-  title: string
-  description: string
-  difficulty: 'easy' | 'medium' | 'hard' | 'extreme'
-  tags: string[]
-  completedBy: number
-  estimatedTime: string
-}
-
-interface ChallengeCardProps {
-  challenge: Challenge
-}
+import { Challenge, Tag } from '@/payload-types'
 
 const difficultyConfig = {
   easy: {
@@ -36,11 +23,11 @@ const difficultyConfig = {
   },
 }
 
-export function ChallengeCard({ challenge }: ChallengeCardProps) {
-  const difficultyInfo = difficultyConfig[challenge.difficulty]
-
+export function ChallengeCard({ challenge }: { challenge: Challenge }) {
+  const difficultyInfo = difficultyConfig[challenge.difficulty || 'easy']
+  const tags: string[] = ((challenge.tags || []) as Tag[]).map((tag) => tag.title || tag.key || '')
   return (
-    <Link href={`/challenges/${challenge.id}`} className="block group">
+    <Link href={`/challenges/${challenge.slug}`} className="block group">
       <Card className="h-full min-h-[150px] flex flex-col justify-between transition-all duration-300 bg-white dark:bg-black hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-1 hover:border-primary/50 group-hover:bg-gray-50/50 dark:group-hover:bg-gray-800/50 dark:border-gray-500 rounded-xl">
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between gap-2 mb-3">
@@ -57,7 +44,7 @@ export function ChallengeCard({ challenge }: ChallengeCardProps) {
         </CardHeader>
         <CardContent className="pt-0">
           <div className="flex flex-wrap gap-1.5">
-            {challenge.tags.map((tag) => (
+            {tags.map((tag) => (
               <Badge
                 key={tag}
                 variant="outline"
