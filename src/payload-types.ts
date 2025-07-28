@@ -833,6 +833,7 @@ export interface Challenge {
   slugLock?: boolean | null;
   difficulty?: ('easy' | 'medium' | 'hard' | 'extreme') | null;
   tags?: (number | Tag)[] | null;
+  visible?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1431,6 +1432,7 @@ export interface ChallengesSelect<T extends boolean = true> {
   slugLock?: T;
   difficulty?: T;
   tags?: T;
+  visible?: T;
   updatedAt?: T;
   createdAt?: T;
 }

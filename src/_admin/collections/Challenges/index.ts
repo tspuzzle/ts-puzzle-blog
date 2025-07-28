@@ -27,6 +27,7 @@ export const Challenges: CollectionConfig = {
       relationTo: 'tags',
       hasMany: true,
     },
+    { name: 'visible', type: 'checkbox', defaultValue: true },
   ],
   timestamps: true,
 }
