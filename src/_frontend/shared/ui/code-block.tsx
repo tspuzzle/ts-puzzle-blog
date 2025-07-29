@@ -2,7 +2,7 @@
 import { useTheme } from '@/_frontend/shared/providers/Theme'
 import { Editor } from '@monaco-editor/react'
 import React from 'react'
-import { CopyButton } from './CopyButton'
+import { CopyToBufferButton } from './copy-to-buffer-button'
 
 type Props = {
   code: string
@@ -54,7 +54,7 @@ export const CodeBlock: React.FC<Props> = ({ code, includeLines, language = 'typ
           },
         }}
       />
-      <CopyButton code={code} />
+      <CopyToBufferButton code={code} />
     </div>
   )
 }

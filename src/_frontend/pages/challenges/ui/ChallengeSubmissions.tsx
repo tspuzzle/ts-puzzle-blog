@@ -7,52 +7,113 @@ import {
   getChallengeSubmissions,
   getChallengeSubmissionsForUser,
 } from '../api/getChallengeSubmissions'
+import { ChallengeSubmissionCard } from './ChallengeSubmissionCard'
+import { Loader2 } from 'lucide-react'
 
-export const ChallengeSubmissions = ({ challengeId }: { challengeId: number }) => {
+const UserSubmissions = ({ challengeId }: { challengeId: number }) => {
   const { data: session } = useSession()
-
   const [userSubmissions, setUserSubmissions] = useState<ChallengeUserSubmission[]>([])
-  const [otherSubmissions, setOtherSubmissions] = useState<ChallengeUserSubmission[]>([])
 
-  const [isPendingUserSubmissions, startTransitionGetUserSubmissions] = useTransition()
-  const [isPendingAllSubmissions, startTransitionGetAllSubmissions] = useTransition()
+  const [isPending, startTransition] = useTransition()
 
   useEffect(() => {
-    startTransitionGetUserSubmissions(async () => {
+    startTransition(async () => {
       if (!session?.user?.id) return
       const submissions = await getChallengeSubmissionsForUser(challengeId, session.user.id)
       setUserSubmissions(submissions)
     })
+  }, [session, challengeId])
 
-    startTransitionGetAllSubmissions(async () => {
+  if (!session?.user?.id) {
+    return null
+  }
+
+  if (isPending) {
+    return (
+      <>
+        <h1 className="font-bold text-lg">Your submissions</h1>
+        <div className="w-full flex justify-center items-center h-32">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </>
+    )
+  }
+
+  if (userSubmissions.length === 0) {
+    return (
+      <>
+        <h1 className="font-bold text-lg">Your submissions</h1>
+        <div className="w-full flex justify-center items-center h-32">
+          You not submitted any solutions yet.
+        </div>
+      </>
+    )
+  }
+
+  return (
+    <>
+      <h1 className="font-bold text-lg">User submissions</h1>
+      <div className="flex flex-col gap-4 mb-4">
+        {userSubmissions.map((submission) => (
+          <ChallengeSubmissionCard key={submission.id} submission={submission} />
+        ))}
+      </div>
+    </>
+  )
+}
+
+const OtherSubmissions = ({ challengeId }: { challengeId: number }) => {
+  const { data: session } = useSession()
+  const [submissions, setSubmissions] = useState<ChallengeUserSubmission[]>([])
+
+  const [isPending, startTransition] = useTransition()
+
+  useEffect(() => {
+    startTransition(async () => {
       const submissions = await getChallengeSubmissions(challengeId, session?.user?.id)
-      setOtherSubmissions(submissions)
+      setSubmissions(submissions)
     })
   }, [session, challengeId])
 
-  return (
-    <div>
-      <h2 className="font-bold">Your Submissions</h2>
-      {isPendingUserSubmissions ? (
-        <p>Loading...</p>
-      ) : (
-        <ul>
-          {userSubmissions.map((submission) => (
-            <li key={submission.id}>{submission.solution}</li>
-          ))}
-        </ul>
-      )}
+  if (isPending) {
+    return (
+      <>
+        <h1 className="font-bold text-lg">Other submissions</h1>
+        <div className="w-full flex justify-center items-center h-32">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </>
+    )
+  }
 
-      <h2 className="font-bold mt-4">Other Submissions</h2>
-      {isPendingAllSubmissions ? (
-        <p>Loading...</p>
-      ) : (
-        <ul>
-          {otherSubmissions.map((submission) => (
-            <li key={submission.id}>{submission.solution}</li>
-          ))}
-        </ul>
-      )}
-    </div>
+  if (submissions.length === 0) {
+    return (
+      <>
+        <h1 className="font-bold text-lg">Other submissions</h1>
+        <div className="w-full flex justify-center items-center h-32">
+          There are no submissions yet.
+        </div>
+      </>
+    )
+  }
+
+  return (
+    <>
+      <h1 className="font-bold text-lg mb-2">User submissions</h1>
+      <div className="w-full flex flex-col gap-4">
+        {submissions.map((submission) => (
+          <ChallengeSubmissionCard key={submission.id} submission={submission} showUser />
+        ))}
+      </div>
+    </>
+  )
+}
+
+export const ChallengeSubmissions = ({ challengeId }: { challengeId: number }) => {
+  return (
+    <>
+      <UserSubmissions challengeId={challengeId} />
+      <OtherSubmissions challengeId={challengeId} />
+    </>
   )
 }

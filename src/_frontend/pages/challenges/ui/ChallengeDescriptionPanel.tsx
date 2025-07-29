@@ -71,7 +71,13 @@ export const ChallengeDescriptionPanel = ({
         </TabsTrigger>
         */}
         <TabsTrigger value="solutions">
-          <BookOpen className="mr-2 h-4 w-4" /> Solutions
+          {isCollapsedPanel ? (
+            <BookOpen className="h-7 w-7 min-w-7" />
+          ) : (
+            <>
+              <BookOpen className="mr-2 h-4 w-4" /> Test Cases
+            </>
+          )}
         </TabsTrigger>
       </TabsList>
 
