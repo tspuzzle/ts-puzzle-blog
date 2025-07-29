@@ -34,7 +34,9 @@ export const ChallengePassedDialog = ({
           <div>
             <Button
               onClick={async () => {
-                await signIn('github', { redirectTo: `/challenges/${challengeSlug}?withSubmit` })
+                await signIn('github', {
+                  redirectTo: `/challenges/${challengeSlug}?withSubmit=true`,
+                })
               }}
             >
               Sign In

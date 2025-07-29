@@ -16,8 +16,13 @@ import { ChallengeDescriptionPanel } from './ChallengeDescriptionPanel'
 import { ChallengePassedDialog } from './ChallengePassedDialog'
 import { useSession } from 'next-auth/react'
 import { ChallengeSolutionSubmission } from './ChallengeSolutionSubmission'
+import { useSearchParams } from 'next/navigation'
+import { is } from '@payloadcms/db-postgres/drizzle'
 
 export const ChallengePage = ({ challenge }: { challenge: Challenge }) => {
+  const searchParams = useSearchParams()
+  const withSubmit = !!searchParams.get('withSubmit')
+
   const [currentTab, setCurrentTab] = useState('description')
 
   const { code, setCode, testCaseStates, runTests, isRunningTests } = useRunTests({
@@ -55,6 +60,12 @@ export const ChallengePage = ({ challenge }: { challenge: Challenge }) => {
   const { status } = useSession()
 
   const isAuthorisedUser = status === 'authenticated'
+
+  useEffect(() => {
+    if (isAuthorisedUser && withSubmit) {
+      setShowSuccessDialog(true)
+    }
+  }, [withSubmit, isAuthorisedUser])
 
   return (
     <>
