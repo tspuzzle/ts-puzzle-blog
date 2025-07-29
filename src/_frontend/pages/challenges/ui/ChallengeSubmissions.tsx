@@ -31,7 +31,7 @@ const UserSubmissions = ({ challengeId }: { challengeId: number }) => {
   if (isPending) {
     return (
       <>
-        <h1 className="font-bold text-lg">Your submissions</h1>
+        <h1 className="font-bold text-lg mb-2">Your submissions</h1>
         <div className="w-full flex justify-center items-center h-32">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
@@ -42,7 +42,7 @@ const UserSubmissions = ({ challengeId }: { challengeId: number }) => {
   if (userSubmissions.length === 0) {
     return (
       <>
-        <h1 className="font-bold text-lg">Your submissions</h1>
+        <h1 className="font-bold text-lg mb-2">Your submissions</h1>
         <div className="w-full flex justify-center items-center h-32">
           You not submitted any solutions yet.
         </div>
@@ -52,7 +52,7 @@ const UserSubmissions = ({ challengeId }: { challengeId: number }) => {
 
   return (
     <>
-      <h1 className="font-bold text-lg">User submissions</h1>
+      <h1 className="font-bold text-lg mb-2">Your submissions</h1>
       <div className="flex flex-col gap-4 mb-4">
         {userSubmissions.map((submission) => (
           <ChallengeSubmissionCard key={submission.id} submission={submission} />
@@ -78,7 +78,7 @@ const OtherSubmissions = ({ challengeId }: { challengeId: number }) => {
   if (isPending) {
     return (
       <>
-        <h1 className="font-bold text-lg">Other submissions</h1>
+        <h1 className="font-bold text-lg mb-2">Other submissions</h1>
         <div className="w-full flex justify-center items-center h-32">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
@@ -89,7 +89,7 @@ const OtherSubmissions = ({ challengeId }: { challengeId: number }) => {
   if (submissions.length === 0) {
     return (
       <>
-        <h1 className="font-bold text-lg">Other submissions</h1>
+        <h1 className="font-bold text-lg mb-2">Other submissions</h1>
         <div className="w-full flex justify-center items-center h-32">
           There are no submissions yet.
         </div>
@@ -99,7 +99,7 @@ const OtherSubmissions = ({ challengeId }: { challengeId: number }) => {
 
   return (
     <>
-      <h1 className="font-bold text-lg mb-2">User submissions</h1>
+      <h1 className="font-bold text-lg mb-2">Other submissions</h1>
       <div className="w-full flex flex-col gap-4">
         {submissions.map((submission) => (
           <ChallengeSubmissionCard key={submission.id} submission={submission} showUser />
