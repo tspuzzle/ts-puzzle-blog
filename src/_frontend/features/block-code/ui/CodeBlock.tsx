@@ -1,7 +1,7 @@
 'use client'
 import { useTheme } from '@/_frontend/shared/providers/Theme'
 import { Editor } from '@monaco-editor/react'
-import React, { useState } from 'react'
+import React from 'react'
 import { CopyButton } from './CopyButton'
 
 type Props = {

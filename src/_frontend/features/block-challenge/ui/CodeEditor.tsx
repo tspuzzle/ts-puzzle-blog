@@ -1,8 +1,5 @@
 'use client'
-import { cn } from '@/_frontend/shared/lib/cn'
 import { useTheme } from '@/_frontend/shared/providers/Theme'
-import { Card, CardContent } from '@/_frontend/shared/ui/card'
-import { Textarea } from '@/_frontend/shared/ui/textarea'
 import { Editor } from '@monaco-editor/react'
 import { useState } from 'react'
 
@@ -27,7 +24,7 @@ export function CodeEditor({ value, onChange, className }: CodeEditorProps) {
         //height={height}
         value={value}
         language={'typescript'}
-        theme={theme === 'light' ? 'vs' : 'vs-dark'}
+        theme={theme === 'dark' ? 'vs-dark' : 'vs-light'}
         options={{
           automaticLayout: true,
           minimap: { enabled: false },
@@ -70,24 +67,9 @@ export function CodeEditor({ value, onChange, className }: CodeEditorProps) {
             })
           }
 
-          monaco.editor.setTheme('customTheme')
+          //monaco.editor.setTheme('customTheme')
         }}
       />
     </div>
-  )
-
-  return (
-    <Card className={cn('flex flex-col', className)}>
-      {/* Removed h-[600px] */}
-      <CardContent className="flex-1 p-0">
-        <Textarea
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className="w-full h-full font-mono text-sm p-4 resize-none border-none focus-visible:ring-0 focus-visible:ring-offset-0"
-          placeholder="Write your code here..."
-          spellCheck="false"
-        />
-      </CardContent>
-    </Card>
   )
 }
