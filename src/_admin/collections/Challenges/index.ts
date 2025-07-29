@@ -12,7 +12,7 @@ export const Challenges: CollectionConfig = {
   },
   fields: [
     ...challengeBlockFields,
-    ...slugField('title', { checkboxOverrides: { required: true, unique: true } }),
+    ...slugField(),
     {
       name: 'difficulty',
       type: 'select',

@@ -1,5 +1,5 @@
 {
-  "id": "a6d41a9e-86bb-4d42-9ab2-c03ff4bf4326",
+  "id": "3408e706-aca7-4e19-ad37-db872ae400f8",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -5164,7 +5164,7 @@
           "name": "slug_lock",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "default": true
         },
         "difficulty": {
@@ -5209,21 +5209,6 @@
             }
           ],
           "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "challenges_slug_lock_idx": {
-          "name": "challenges_slug_lock_idx",
-          "columns": [
-            {
-              "expression": "slug_lock",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
           "concurrently": false,
           "method": "btree",
           "with": {}
