@@ -2,7 +2,7 @@ import { ChallengePage, getChallengeBySlug } from '@/_frontend/pages/challenges'
 
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
-import { cache } from 'react'
+import { cache, Suspense } from 'react'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -34,7 +34,11 @@ export default async function Challenge({ params: paramsPromise }: Args) {
   const { slug = '' } = await paramsPromise
   const challenge = await cachedGetChallengeBySlug({ slug })
 
-  return <ChallengePage challenge={challenge} />
+  return (
+    <Suspense>
+      <ChallengePage challenge={challenge} />
+    </Suspense>
+  )
 }
 
 /*
