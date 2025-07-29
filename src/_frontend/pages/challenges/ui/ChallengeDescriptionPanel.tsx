@@ -75,7 +75,7 @@ export const ChallengeDescriptionPanel = ({
             <BookOpen className="h-7 w-7 min-w-7" />
           ) : (
             <>
-              <BookOpen className="mr-2 h-4 w-4" /> Test Cases
+              <BookOpen className="mr-2 h-4 w-4" /> Submissions
             </>
           )}
         </TabsTrigger>
