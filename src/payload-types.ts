@@ -73,6 +73,7 @@ export interface Config {
     categories: Category;
     users: User;
     challenges: Challenge;
+    'challenge-user-submissions': ChallengeUserSubmission;
     accounts: Account;
     tags: Tag;
     redirects: Redirect;
@@ -96,6 +97,7 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     challenges: ChallengesSelect<false> | ChallengesSelect<true>;
+    'challenge-user-submissions': ChallengeUserSubmissionsSelect<false> | ChallengeUserSubmissionsSelect<true>;
     accounts: AccountsSelect<false> | AccountsSelect<true>;
     tags: TagsSelect<false> | TagsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
@@ -852,6 +854,19 @@ export interface Tag {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "challenge-user-submissions".
+ */
+export interface ChallengeUserSubmission {
+  id: number;
+  challenge: number | Challenge;
+  user: number | User;
+  solution: string;
+  annotations?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1046,6 +1061,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'challenges';
         value: number | Challenge;
+      } | null)
+    | ({
+        relationTo: 'challenge-user-submissions';
+        value: number | ChallengeUserSubmission;
       } | null)
     | ({
         relationTo: 'accounts';
@@ -1435,6 +1454,18 @@ export interface ChallengesSelect<T extends boolean = true> {
   difficulty?: T;
   tags?: T;
   visible?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "challenge-user-submissions_select".
+ */
+export interface ChallengeUserSubmissionsSelect<T extends boolean = true> {
+  challenge?: T;
+  user?: T;
+  solution?: T;
+  annotations?: T;
   updatedAt?: T;
   createdAt?: T;
 }

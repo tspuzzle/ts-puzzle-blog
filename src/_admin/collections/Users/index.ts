@@ -34,6 +34,9 @@ export const Users: CollectionConfig = {
       return false
     },
   },
+  admin: {
+    useAsTitle: 'email',
+  },
   endpoints: [
     {
       path: '/logout',

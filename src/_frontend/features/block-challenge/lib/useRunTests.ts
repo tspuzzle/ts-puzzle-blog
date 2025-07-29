@@ -8,11 +8,13 @@ const getLocalStorageItemKey = (challengeId: string | number) => `challenge-${ch
 export const useRunTests = ({
   challengeBlock,
   beforeRunTests,
+  afterSuccessRunTests,
 }: {
   challengeBlock: Omit<ChallengeBlock, 'blockType' | 'id'> & {
     id?: number | string | null | undefined
   }
   beforeRunTests?: () => void
+  afterSuccessRunTests?: () => void
 }) => {
   const { initialCode, testCases } = challengeBlock
 
@@ -55,6 +57,7 @@ export const useRunTests = ({
           getLocalStorageItemKey(challengeBlock.id!),
           JSON.stringify({ code, allPassed: true }),
         )
+        afterSuccessRunTests?.()
       } else {
         localStorage.removeItem(getLocalStorageItemKey(challengeBlock.id!))
       }

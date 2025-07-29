@@ -1,18 +1,21 @@
 'use client'
+import { useRunTests } from '@/_frontend/features/block-challenge/lib/useRunTests'
 import { CodeEditor } from '@/_frontend/features/block-challenge/ui/CodeEditor'
+import { Button } from '@/_frontend/shared/ui/button'
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/_frontend/shared/ui/resizable'
 import { ChevronsLeft, ChevronsRight, Code } from 'lucide-react' // Add Swords icon
+import { useEffect, useRef, useState } from 'react'
+import { ImperativePanelGroupHandle } from 'react-resizable-panels'
+import { useMeasure } from 'react-use'
 import { Challenge } from '../model'
 import { ChallengeDescriptionPanel } from './ChallengeDescriptionPanel'
-import { useRunTests } from '@/_frontend/features/block-challenge/lib/useRunTests'
-import { Button } from '@/_frontend/shared/ui/button'
-import { useEffect, useRef, useState } from 'react'
-import { useMeasure } from 'react-use'
-import { ImperativePanelGroupHandle } from 'react-resizable-panels'
+import { ChallengePassedDialog } from './ChallengePassedDialog'
+import { useSession } from 'next-auth/react'
+import { ChallengeSolutionSubmission } from './ChallengeSolutionSubmission'
 
 export const ChallengePage = ({ challenge }: { challenge: Challenge }) => {
   const [currentTab, setCurrentTab] = useState('description')
@@ -22,7 +25,12 @@ export const ChallengePage = ({ challenge }: { challenge: Challenge }) => {
     beforeRunTests: () => {
       setCurrentTab('test-cases')
     },
+    afterSuccessRunTests: () => {
+      setShowSuccessDialog(true)
+    },
   })
+
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false)
 
   const panelGroupApiRef = useRef<ImperativePanelGroupHandle>(null)
 
@@ -44,65 +52,84 @@ export const ChallengePage = ({ challenge }: { challenge: Challenge }) => {
     }
   }, [panelLeftWidth])
 
+  const { status } = useSession()
+
+  const isAuthorisedUser = status === 'authenticated'
+
   return (
-    <div className="flex h-[calc(100vh-80px)] w-full flex-col" ref={panelContainerRef}>
-      <div className="flex-grow overflow-hidden">
-        <ResizablePanelGroup
-          direction={'horizontal'}
-          className="h-full w-full rounded-lg border"
-          ref={panelGroupApiRef}
-        >
-          <ResizablePanel defaultSize={50} minSize={minSize}>
-            <ChallengeDescriptionPanel
-              ref={panelLeftContainerRef}
-              challenge={challenge}
-              testCaseStates={testCaseStates}
-              currentTab={currentTab}
-              onChangeTab={(value) => {
-                if (isCollapsedLeftPanel && panelGroupApiRef.current) {
-                  panelGroupApiRef.current.setLayout([50, 50])
-                }
-                setCurrentTab(value)
-              }}
-              isCollapsedPanel={isCollapsedLeftPanel}
-            />
-          </ResizablePanel>
+    <>
+      <div className="flex h-[calc(100vh-80px)] w-full flex-col" ref={panelContainerRef}>
+        <div className="flex-grow overflow-hidden">
+          <ResizablePanelGroup
+            direction={'horizontal'}
+            className="h-full w-full rounded-lg border"
+            ref={panelGroupApiRef}
+          >
+            <ResizablePanel defaultSize={50} minSize={minSize}>
+              <ChallengeDescriptionPanel
+                ref={panelLeftContainerRef}
+                challenge={challenge}
+                testCaseStates={testCaseStates}
+                currentTab={currentTab}
+                onChangeTab={(value) => {
+                  if (isCollapsedLeftPanel && panelGroupApiRef.current) {
+                    panelGroupApiRef.current.setLayout([50, 50])
+                  }
+                  setCurrentTab(value)
+                }}
+                isCollapsedPanel={isCollapsedLeftPanel}
+              />
+            </ResizablePanel>
 
-          <ResizableHandle withHandle />
+            <ResizableHandle withHandle />
 
-          {/* Right Panel */}
-          <ResizablePanel defaultSize={50}>
-            <div className="h-full flex flex-col p-6">
-              <div className="flex items-center gap-2 text-lg font-semibold mb-4">
+            {/* Right Panel */}
+            <ResizablePanel defaultSize={50}>
+              <div className="h-full flex flex-col p-6">
+                <div className="flex items-center gap-2 text-lg font-semibold mb-4">
+                  <Button
+                    variant={'ghost'}
+                    size="clear"
+                    className="-ml-3"
+                    onClick={() => {
+                      if (isCollapsedLeftPanel) {
+                        panelGroupApiRef.current?.setLayout([50, 50])
+                      } else {
+                        panelGroupApiRef.current?.setLayout([minSize, 100 - minSize])
+                      }
+                    }}
+                  >
+                    {!isCollapsedLeftPanel && <ChevronsLeft className="w-4 h-4" />}
+                    {isCollapsedLeftPanel && <ChevronsRight className="w-4 h-4" />}
+                  </Button>
+                  <Code className="h-5 w-5" /> Code
+                </div>
+                <CodeEditor value={code} onChange={setCode} className="flex-1" />
                 <Button
-                  variant={'ghost'}
-                  size="clear"
-                  className="-ml-3"
-                  onClick={() => {
-                    if (isCollapsedLeftPanel) {
-                      panelGroupApiRef.current?.setLayout([50, 50])
-                    } else {
-                      panelGroupApiRef.current?.setLayout([minSize, 100 - minSize])
-                    }
-                  }}
+                  onClick={runTests}
+                  className="mt-4 w-full flex-shrink-0"
+                  disabled={isRunningTests}
                 >
-                  {!isCollapsedLeftPanel && <ChevronsLeft className="w-4 h-4" />}
-                  {isCollapsedLeftPanel && <ChevronsRight className="w-4 h-4" />}
+                  {!isRunningTests ? 'Run' : 'Checking....'}
                 </Button>
-                <Code className="h-5 w-5" /> Code
               </div>
-              <CodeEditor value={code} onChange={setCode} className="flex-1" />
-              <Button
-                onClick={runTests}
-                className="mt-4 w-full flex-shrink-0"
-                disabled={isRunningTests}
-              >
-                {!isRunningTests ? 'Run' : 'Checking....'}
-              </Button>
-            </div>
-          </ResizablePanel>
-        </ResizablePanelGroup>
+            </ResizablePanel>
+          </ResizablePanelGroup>
+        </div>
       </div>
-    </div>
+      {!isAuthorisedUser ? (
+        <ChallengePassedDialog
+          open={showSuccessDialog}
+          onClose={() => setShowSuccessDialog(false)}
+        />
+      ) : (
+        <ChallengeSolutionSubmission
+          open={showSuccessDialog}
+          onClose={() => setShowSuccessDialog(false)}
+          solution={code}
+          challengeId={challenge.id}
+        />
+      )}
+    </>
   )
 }

@@ -4,7 +4,7 @@ import { TestCaseList } from '@/_frontend/features/block-challenge/ui/TestCaseLi
 import { cn } from '@/_frontend/shared/lib/cn' // Import cn utility
 import RichText from '@/_frontend/shared/ui/rich-text'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/_frontend/shared/ui/tabs'
-import { FileText, FlaskConical } from 'lucide-react' // Add Swords icon
+import { BookOpen, FileText, FlaskConical } from 'lucide-react' // Add Swords icon
 import { Challenge } from '../model'
 import { BadgeDifficulty } from '@/_frontend/shared/ui/badge-difficulty'
 import { BadgeTag } from '@/_frontend/shared/ui/badge-tag'
@@ -68,10 +68,10 @@ export const ChallengeDescriptionPanel = ({
         <TabsTrigger value="hints">
           <Lightbulb className="mr-2 h-4 w-4" /> Hints
         </TabsTrigger>
+        */}
         <TabsTrigger value="solutions">
           <BookOpen className="mr-2 h-4 w-4" /> Solutions
         </TabsTrigger>
-        */}
       </TabsList>
 
       {!isCollapsedPanel && (

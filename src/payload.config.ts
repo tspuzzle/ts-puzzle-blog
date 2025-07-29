@@ -20,6 +20,7 @@ import { plugins } from '@/_admin/plugins'
 import { defaultLexical } from '@/_admin/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
 import { Accounts } from './_admin/collections/Accounts'
+import { ChallengeUserSubmissions } from './_admin/collections/ChallengeUserSubmissions'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -76,7 +77,17 @@ const paylodConfig = buildConfig({
       connectionString: process.env.DATABASE_URI || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users, Challenges, Accounts, Tags],
+  collections: [
+    Pages,
+    Posts,
+    Media,
+    Categories,
+    Users,
+    Challenges,
+    ChallengeUserSubmissions,
+    Accounts,
+    Tags,
+  ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [

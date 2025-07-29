@@ -7,6 +7,9 @@ export const Challenges: CollectionConfig = {
   access: {
     read: () => true, // Public read access
   },
+  admin: {
+    useAsTitle: 'title',
+  },
   fields: [
     ...challengeBlockFields,
     ...slugField(),
