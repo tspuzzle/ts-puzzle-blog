@@ -9,6 +9,7 @@ import { Challenge } from '../model'
 import { BadgeDifficulty } from '@/_frontend/shared/ui/badge-difficulty'
 import { BadgeTag } from '@/_frontend/shared/ui/badge-tag'
 import { Tag } from '@/payload-types'
+import { ChallengeSubmissions } from './ChallengeSubmissions'
 
 export const ChallengeDescriptionPanel = ({
   challenge,
@@ -94,6 +95,9 @@ export const ChallengeDescriptionPanel = ({
               testCaseStates={testCaseStates}
               isCompact={false}
             />
+          </TabsContent>
+          <TabsContent value="solutions" className="mt-6">
+            <ChallengeSubmissions challengeId={challenge.id} />
           </TabsContent>
         </div>
       )}

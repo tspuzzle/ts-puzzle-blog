@@ -9,6 +9,7 @@ import * as migration_20250727_203151_user_auth from './20250727_203151_user_aut
 import * as migration_20250728_120201_add_tags from './20250728_120201_add_tags';
 import * as migration_20250728_151727_difficultu_required from './20250728_151727_difficultu_required';
 import * as migration_20250728_184842_add_role from './20250728_184842_add_role';
+import * as migration_20250729_172610_user_submissions from './20250729_172610_user_submissions';
 
 export const migrations = [
   {
@@ -64,6 +65,11 @@ export const migrations = [
   {
     up: migration_20250728_184842_add_role.up,
     down: migration_20250728_184842_add_role.down,
-    name: '20250728_184842_add_role'
+    name: '20250728_184842_add_role',
+  },
+  {
+    up: migration_20250729_172610_user_submissions.up,
+    down: migration_20250729_172610_user_submissions.down,
+    name: '20250729_172610_user_submissions'
   },
 ];

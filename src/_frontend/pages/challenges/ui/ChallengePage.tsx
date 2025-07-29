@@ -119,6 +119,7 @@ export const ChallengePage = ({ challenge }: { challenge: Challenge }) => {
       </div>
       {!isAuthorisedUser ? (
         <ChallengePassedDialog
+          challengeSlug={challenge.slug!}
           open={showSuccessDialog}
           onClose={() => setShowSuccessDialog(false)}
         />
@@ -128,6 +129,7 @@ export const ChallengePage = ({ challenge }: { challenge: Challenge }) => {
           onClose={() => setShowSuccessDialog(false)}
           solution={code}
           challengeId={challenge.id}
+          afterSaveSubmission={() => setCurrentTab('solutions')}
         />
       )}
     </>

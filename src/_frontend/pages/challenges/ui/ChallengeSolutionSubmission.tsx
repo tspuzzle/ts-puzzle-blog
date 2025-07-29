@@ -23,11 +23,13 @@ export const ChallengeSolutionSubmission = ({
   onClose,
   solution,
   challengeId,
+  afterSaveSubmission,
 }: {
   open: boolean
   onClose: () => void
   solution: string
   challengeId: number
+  afterSaveSubmission: () => void
 }) => {
   const [ref, { width, height }] = useMeasure<HTMLDivElement>()
 
@@ -49,6 +51,8 @@ export const ChallengeSolutionSubmission = ({
           solution,
           annotations: values.annotations,
         })
+
+        afterSaveSubmission()
         onClose()
       }
     })

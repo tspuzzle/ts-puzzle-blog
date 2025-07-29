@@ -833,7 +833,7 @@ export interface Challenge {
       }[]
     | null;
   slug?: string | null;
-  slugLock?: boolean | null;
+  slugLock: boolean;
   difficulty: 'easy' | 'medium' | 'hard' | 'extreme';
   tags?: (number | Tag)[] | null;
   visible?: boolean | null;

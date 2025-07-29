@@ -1,14 +1,17 @@
 import { Button } from '@/_frontend/shared/ui/button'
 import { Dialog, DialogContent } from '@/_frontend/shared/ui/dialog'
+import { signIn } from 'next-auth/react'
 import Confetti from 'react-confetti'
 import { useMeasure } from 'react-use'
 
 export const ChallengePassedDialog = ({
   open,
   onClose,
+  challengeSlug,
 }: {
   open: boolean
   onClose: () => void
+  challengeSlug: string
 }) => {
   const [ref, { width, height }] = useMeasure<HTMLDivElement>()
 
@@ -29,7 +32,13 @@ export const ChallengePassedDialog = ({
 
           <span className="text-xl">You&apos;re clearly skilled — why not show it off?</span>
           <div>
-            <Button onClick={onClose}>Close</Button>
+            <Button
+              onClick={async () => {
+                await signIn('github', { redirectTo: `/challenges/${challengeSlug}?withSubmit` })
+              }}
+            >
+              Sign In
+            </Button>
           </div>
         </div>
       </DialogContent>
