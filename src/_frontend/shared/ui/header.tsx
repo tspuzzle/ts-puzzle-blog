@@ -83,6 +83,7 @@ export function Header() {
           </Link>
         </div>
         <nav ref={navRef} className="relative hidden items-center gap-6 lg:flex">
+          {/*
           <Link
             href="/blog"
             className="text-sm font-medium py-1" // Added py-1 for space for the underline
@@ -99,6 +100,7 @@ export function Header() {
           >
             Support Us
           </Link>
+          */}
           <Link
             href="/challenges"
             className="text-sm font-medium py-1"
