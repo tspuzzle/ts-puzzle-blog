@@ -5,6 +5,7 @@ import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
 import Script from 'next/script'
 import React from 'react'
+import { Analytics } from '@vercel/analytics/next'
 
 import { Providers } from '@/_frontend/app/providers'
 import { InitTheme } from '@/_frontend/shared/providers/Theme/InitTheme'
@@ -50,6 +51,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <main className="mt-20">{children}</main>
           {/* <Footer /> */}
         </Providers>
+        <Analytics />
       </body>
     </html>
   )
