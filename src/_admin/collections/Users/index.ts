@@ -51,17 +51,31 @@ export const Users: CollectionConfig = {
     },
   ],
   fields: [
-    { name: 'email', type: 'email', required: true, access: { read: () => false } },
+    {
+      name: 'email',
+      type: 'email',
+      required: true,
+      access: { read: ({ req: { user } }) => user?.role === 'admin' },
+    },
     { name: 'name', type: 'text' },
     { name: 'image', type: 'text' },
-    { name: 'emailVerified', type: 'date', access: { read: () => false } },
-    { name: 'password', type: 'text', hidden: true, access: { read: () => false } },
+    {
+      name: 'emailVerified',
+      type: 'date',
+      access: { read: ({ req: { user } }) => user?.role === 'admin' },
+    },
+    {
+      name: 'password',
+      type: 'text',
+      hidden: true,
+      access: { read: ({ req: { user } }) => user?.role === 'admin' },
+    },
     {
       name: 'role',
       type: 'select',
       options: ['user', 'admin'],
       defaultValue: 'user',
-      access: { read: () => false },
+      access: { read: ({ req: { user } }) => user?.role === 'admin' },
     },
     {
       name: 'accounts',
@@ -71,7 +85,7 @@ export const Users: CollectionConfig = {
       admin: {
         defaultColumns: ['id', 'type', 'provider'],
       },
-      access: { read: () => false },
+      access: { read: ({ req: { user } }) => user?.role === 'admin' },
     },
   ],
   timestamps: true,
