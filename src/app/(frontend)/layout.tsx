@@ -3,21 +3,18 @@ import type { Metadata } from 'next'
 import { cn } from '@/_frontend/shared/lib/cn'
 import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
-import React from 'react'
 import Script from 'next/script'
+import React from 'react'
 
 import { Providers } from '@/_frontend/app/providers'
 import { InitTheme } from '@/_frontend/shared/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
-import { draftMode } from 'next/headers'
 
 import '@/_frontend/app/styles/globals.css'
 import { Header } from '@/_frontend/shared/ui/header'
 import { getServerSideURL } from '@/utilities/getURL'
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const { isEnabled } = await draftMode()
-
   return (
     <html className={cn(GeistSans.variable, GeistMono.variable)} lang="en" suppressHydrationWarning>
       <head>
