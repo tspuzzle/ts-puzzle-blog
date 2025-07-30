@@ -19,13 +19,16 @@ import type {
   MediaBlock as MediaBlockProps,
   QuoteBlock as QuoteBlockProps,
   ChallengeBlock as ChallengeBlockProps,
+  ChallengeLinkBlock as ChallengeLinkBlockProps,
   CodeBlock as CodeBlockProps,
 } from '@/payload-types'
+
 import { BannerBlock } from '@/blocks/Banner/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { cn } from '@/_frontend/shared/lib/cn'
 import { QuoteBlock } from '@/blocks/QuoteBlock/Component'
 import { ChallengeBlock } from '@/blocks/ChallengeBlock/Component'
+import { ChallengeLinkBlock } from '@/blocks/ChallengeLinkBlock/Component'
 
 type NodeTypes =
   | DefaultNodeTypes
@@ -36,6 +39,7 @@ type NodeTypes =
       | CodeBlockProps
       | QuoteBlockProps
       | ChallengeBlockProps
+      | ChallengeLinkBlockProps
     >
 
 const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
@@ -66,6 +70,7 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) 
     cta: ({ node }) => <CallToActionBlock {...node.fields} />,
     quoteBlock: ({ node }) => <QuoteBlock {...node.fields} />,
     challengeBlock: ({ node }) => <ChallengeBlock {...node.fields} />,
+    challengeLinkBlock: ({ node }) => <ChallengeLinkBlock {...node.fields} />,
   },
 })
 

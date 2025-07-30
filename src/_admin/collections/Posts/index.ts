@@ -6,6 +6,7 @@ import {
   HeadingFeature,
   HorizontalRuleFeature,
   InlineToolbarFeature,
+  InlineCodeFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
 
@@ -16,6 +17,7 @@ import { Code } from '@/blocks/Code/config'
 import { MediaBlock } from '@/blocks/MediaBlock/config'
 import { QuoteBlock } from '@/blocks/QuoteBlock/config'
 import { ChallengeBlockBlock } from '@/blocks/ChallengeBlock/config'
+import { ChallengeLinkBlock } from '@/blocks/ChallengeLinkBlock/config'
 
 import { generatePreviewPath } from '@/utilities/generatePreviewPath'
 import { populateAuthors } from './hooks/populateAuthors'
@@ -96,9 +98,17 @@ export const Posts: CollectionConfig<'posts'> = {
                     ...rootFeatures,
                     HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
                     BlocksFeature({
-                      blocks: [Banner, Code, MediaBlock, ChallengeBlockBlock, QuoteBlock],
+                      blocks: [
+                        Banner,
+                        Code,
+                        MediaBlock,
+                        ChallengeBlockBlock,
+                        ChallengeLinkBlock,
+                        QuoteBlock,
+                      ],
                     }),
                     FixedToolbarFeature(),
+                    InlineCodeFeature(),
                     InlineToolbarFeature(),
                     HorizontalRuleFeature(),
                   ]

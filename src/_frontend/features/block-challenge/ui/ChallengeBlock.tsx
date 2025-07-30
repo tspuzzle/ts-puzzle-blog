@@ -28,7 +28,6 @@ import { useRunTests } from '../lib/useRunTests'
 import { ChallengeBlock as ChallengeBlockProps, TestCaseStatus } from '../model'
 import { ImperativePanelGroupHandle } from 'react-resizable-panels'
 import { useMeasure } from 'react-use'
-import { set } from 'date-fns'
 
 type Props = ChallengeBlockProps & { mode?: 'widget' | 'page'; slug?: string }
 

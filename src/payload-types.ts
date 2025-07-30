@@ -1977,6 +1977,19 @@ export interface ChallengeBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ChallengeLinkBlock".
+ */
+export interface ChallengeLinkBlock {
+  challengeLink: {
+    relationTo: 'challenges';
+    value: number | Challenge;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'challengeLinkBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "QuoteBlock".
  */
 export interface QuoteBlock {
