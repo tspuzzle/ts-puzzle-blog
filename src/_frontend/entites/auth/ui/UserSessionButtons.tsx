@@ -21,7 +21,6 @@ export const UserSessionButtons = () => {
     return null
   }
 
-  console.log(session)
   return (
     <div>
       {!session && (

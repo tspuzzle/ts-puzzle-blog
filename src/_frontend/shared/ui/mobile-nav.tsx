@@ -21,15 +21,16 @@ export function MobileNav() {
       <SheetContent side="left" className="w-[250px] sm:w-[300px]">
         <nav className="flex flex-col gap-4 py-6">
           {/*
-          <Link href="/blog" className="text-lg font-medium" onClick={() => setIsOpen(false)}>
-            Blog
-          </Link>
+        
           <Link href="/support-us" className="text-lg font-medium" onClick={() => setIsOpen(false)}>
             Support Us
           </Link>
           */}
           <Link href="/challenges" className="text-lg font-medium" onClick={() => setIsOpen(false)}>
             Challenges
+          </Link>
+          <Link href="/posts" className="text-lg font-medium" onClick={() => setIsOpen(false)}>
+            Blog
           </Link>
         </nav>
       </SheetContent>

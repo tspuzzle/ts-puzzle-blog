@@ -84,14 +84,7 @@ export function Header() {
         </div>
         <nav ref={navRef} className="relative hidden items-center gap-6 lg:flex">
           {/*
-          <Link
-            href="/blog"
-            className="text-sm font-medium py-1" // Added py-1 for space for the underline
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-          >
-            Blog
-          </Link>
+         
           <Link
             href="/support-us"
             className="text-sm font-medium py-1"
@@ -108,6 +101,14 @@ export function Header() {
             onMouseLeave={handleMouseLeave}
           >
             Challenges
+          </Link>
+          <Link
+            href="/posts"
+            className="text-sm font-medium py-1" // Added py-1 for space for the underline
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            Blog
           </Link>
           {/* The moving underline element */}
           <div

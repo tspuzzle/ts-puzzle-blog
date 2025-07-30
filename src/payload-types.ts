@@ -227,6 +227,8 @@ export interface Post {
   id: number;
   title: string;
   heroImage?: (number | null) | Media;
+  tags?: (number | Tag)[] | null;
+  author?: (number | null) | User;
   content: {
     root: {
       type: string;
@@ -360,22 +362,13 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories".
+ * via the `definition` "tags".
  */
-export interface Category {
+export interface Tag {
   id: number;
+  key: string;
   title: string;
-  slug?: string | null;
-  slugLock?: boolean | null;
-  parent?: (number | null) | Category;
-  breadcrumbs?:
-    | {
-        doc?: (number | null) | Category;
-        url?: string | null;
-        label?: string | null;
-        id?: string | null;
-      }[]
-    | null;
+  group?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -411,6 +404,27 @@ export interface Account {
   refreshToken?: string | null;
   accessToken?: string | null;
   user: number | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: number;
+  title: string;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  parent?: (number | null) | Category;
+  breadcrumbs?:
+    | {
+        doc?: (number | null) | Category;
+        url?: string | null;
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -842,18 +856,6 @@ export interface Challenge {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tags".
- */
-export interface Tag {
-  id: number;
-  key: string;
-  title: string;
-  group?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "challenge-user-submissions".
  */
 export interface ChallengeUserSubmission {
@@ -1280,6 +1282,8 @@ export interface FormBlockSelect<T extends boolean = true> {
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
   heroImage?: T;
+  tags?: T;
+  author?: T;
   content?: T;
   relatedPosts?: T;
   categories?: T;

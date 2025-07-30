@@ -7,6 +7,8 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
 import PageClient from './page.client'
+import Post from './[slug]/page'
+import { PostsListPage } from '@/_frontend/pages/posts-list'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
@@ -22,11 +24,15 @@ export default async function Page() {
     select: {
       title: true,
       slug: true,
-      categories: true,
+      author: true,
+      createdAt: true,
+      tags: true,
       meta: true,
     },
   })
 
+  return <PostsListPage posts={posts.docs} />
+  /*
   return (
     <div className="pt-24 pb-24">
       <PageClient />
@@ -54,6 +60,7 @@ export default async function Page() {
       </div>
     </div>
   )
+    */
 }
 
 export function generateMetadata(): Metadata {

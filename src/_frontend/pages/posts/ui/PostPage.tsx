@@ -4,9 +4,15 @@ import RichText from '@/_frontend/shared/ui/rich-text'
 import { format } from 'date-fns'
 import Link from 'next/link'
 import { Post } from '../model'
+import { Tag } from '@/payload-types'
+import { User } from 'next-auth'
+import { Avatar, AvatarFallback, AvatarImage } from '@/_frontend/shared/ui/avatar'
 
 export const PostPage = async ({ post }: { post: Post }) => {
   const relatedPosts = post.relatedPosts as Post[]
+
+  const tags = (post.tags || []) as Tag[]
+  const author = post.author as User | null
 
   return (
     <CenteredLayout>
@@ -15,21 +21,32 @@ export const PostPage = async ({ post }: { post: Post }) => {
           <h1 className="text-primary text-4xl font-extrabold tracking-tight lg:text-5xl lg:leading-[3.5rem]">
             {post.title}
           </h1>
-          {post.publishedAt && (
-            <p className="text-muted-foreground">
-              Posted on {format(new Date(post.publishedAt), 'MMMM d, yyyy')}
-            </p>
-          )}
+
+          <div className="flex flex-wrap gap-4 items-center justify-between my-3">
+            {author && (
+              <div className="flex gap-3 items-center">
+                <Avatar>
+                  <AvatarImage src={author?.image as string | undefined} />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+                <div>{author.name}</div>
+              </div>
+            )}
+            {post.publishedAt && (
+              <p className="text-muted-foreground">
+                Posted on {format(new Date(post.publishedAt), 'MMMM d, yyyy')}
+              </p>
+            )}
+          </div>
+
           {/* Tags Section */}
-          {/*
-          {post.tags && post.tags.length > 0 && (
+          {tags.length > 0 && (
             <div className="flex flex-wrap gap-2 pt-2">
-              {post.tags.map((tag) => (
-                <Badge key={tag}> {tag}</Badge>
+              {tags.map((tag) => (
+                <Badge key={tag.id}> {tag.title}</Badge>
               ))}
             </div>
           )}
-            */}
         </div>
 
         <RichText data={post.content} enableGutter={false} className="pt-4" />

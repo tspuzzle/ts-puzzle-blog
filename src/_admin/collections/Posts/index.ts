@@ -90,6 +90,17 @@ export const Posts: CollectionConfig<'posts'> = {
               relationTo: 'media',
             },
             {
+              name: 'tags',
+              type: 'relationship',
+              relationTo: 'tags',
+              hasMany: true,
+            },
+            {
+              name: 'author',
+              type: 'relationship',
+              relationTo: 'users',
+            },
+            {
               name: 'content',
               type: 'richText',
               editor: lexicalEditor({
