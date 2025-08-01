@@ -32,6 +32,8 @@ export const Challenges: CollectionConfig = {
       hasMany: true,
     },
     { name: 'visible', type: 'checkbox', defaultValue: true },
+    { name: 'internalNotes', type: 'textarea' },
+    { name: 'internalNumber', type: 'text' },
   ],
   timestamps: true,
 }

@@ -852,6 +852,8 @@ export interface Challenge {
   difficulty: 'easy' | 'medium' | 'hard' | 'extreme';
   tags?: (number | Tag)[] | null;
   visible?: boolean | null;
+  internalNotes?: string | null;
+  internalNumber?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1460,6 +1462,8 @@ export interface ChallengesSelect<T extends boolean = true> {
   difficulty?: T;
   tags?: T;
   visible?: T;
+  internalNotes?: T;
+  internalNumber?: T;
   updatedAt?: T;
   createdAt?: T;
 }

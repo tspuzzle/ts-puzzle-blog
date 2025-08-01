@@ -12,6 +12,7 @@ import * as migration_20250728_184842_add_role from './20250728_184842_add_role'
 import * as migration_20250729_173958_user_submissions from './20250729_173958_user_submissions';
 import * as migration_20250730_191359_add_post_tags from './20250730_191359_add_post_tags';
 import * as migration_20250801_153115_add_actual_challenge_result from './20250801_153115_add_actual_challenge_result';
+import * as migration_20250801_155240_internal_fields from './20250801_155240_internal_fields';
 
 export const migrations = [
   {
@@ -82,6 +83,11 @@ export const migrations = [
   {
     up: migration_20250801_153115_add_actual_challenge_result.up,
     down: migration_20250801_153115_add_actual_challenge_result.down,
-    name: '20250801_153115_add_actual_challenge_result'
+    name: '20250801_153115_add_actual_challenge_result',
+  },
+  {
+    up: migration_20250801_155240_internal_fields.up,
+    down: migration_20250801_155240_internal_fields.down,
+    name: '20250801_155240_internal_fields'
   },
 ];
