@@ -1,10 +1,10 @@
 import type { CollectionAfterChangeHook, CollectionAfterDeleteHook } from 'payload'
 
-import { revalidatePath, revalidateTag } from 'next/cache'
+import { revalidatePath } from 'next/cache'
 
 import type { Challenge } from '@/payload-types'
 
-export const revalidatePost: CollectionAfterChangeHook<Challenge> = ({
+export const revalidateChallenge: CollectionAfterChangeHook<Challenge> = ({
   doc,
   previousDoc,
   req: { payload, context },
@@ -22,6 +22,7 @@ export const revalidatePost: CollectionAfterChangeHook<Challenge> = ({
     }
 
     revalidatePath('/challenges')
+    revalidatePath('/')
   }
   return doc
 }
@@ -35,6 +36,7 @@ export const revalidateDelete: CollectionAfterDeleteHook<Challenge> = ({
 
     revalidatePath(path)
     revalidatePath('/challenges')
+    revalidatePath('/')
 
     // TODO: sitemap
     // revalidateTag('posts-sitemap')

@@ -1,6 +1,7 @@
 import { slugField } from '@/_admin/fields/slug'
 import { challengeBlockFields } from '@/blocks/ChallengeBlock/config'
 import type { CollectionConfig } from 'payload'
+import { revalidateChallenge, revalidateDelete } from './hooks/revalidateChallenge'
 
 export const Challenges: CollectionConfig = {
   slug: 'challenges',
@@ -10,6 +11,7 @@ export const Challenges: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
   },
+  hooks: { afterChange: [revalidateChallenge], afterDelete: [revalidateDelete] },
   fields: [
     ...challengeBlockFields,
     ...slugField(),
