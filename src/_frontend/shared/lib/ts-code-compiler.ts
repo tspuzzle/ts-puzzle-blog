@@ -35,7 +35,7 @@ export type CompileResult = {
   errors: string[]
 }
 
-export const calculateType = async (code: string) => {
+export const inferTypeFromCode = async (code: string, inferredType: string) => {
   await populateTypescriptLibrariesCache()
   const fileName = 'file.ts'
 
@@ -75,7 +75,7 @@ export const calculateType = async (code: string) => {
 
   if (sourceFile) {
     ts.forEachChild(sourceFile, (node) => {
-      if (ts.isTypeAliasDeclaration(node) && node.name.text === 'T') {
+      if (ts.isTypeAliasDeclaration(node) && node.name.text === inferredType) {
         const type = checker.getTypeFromTypeNode(node.type)
         resolvedTypeString = checker.typeToString(type)
       }

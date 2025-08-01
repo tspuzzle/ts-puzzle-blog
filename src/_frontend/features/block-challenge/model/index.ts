@@ -11,6 +11,7 @@ export enum TestCaseStatus {
 
 export type TestCaseState = {
   status: TestCaseStatus
+  inferredActualResult?: string | undefined | null
 }
 
 export type TestCase = ExtractArrayType<Exclude<ChallengeBlock['testCases'], null | undefined>>

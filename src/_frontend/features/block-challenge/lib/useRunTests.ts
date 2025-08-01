@@ -1,7 +1,7 @@
 import { ChallengeBlock } from '@/payload-types'
 import { useEffect, useState, useTransition } from 'react'
 import { TestCaseState, TestCaseStatus } from '../model'
-import { compileTypescriptCode } from '@/_frontend/shared/lib/ts-code-compiler'
+import { compileTypescriptCode, inferTypeFromCode } from '@/_frontend/shared/lib/ts-code-compiler'
 
 const getLocalStorageItemKey = (challengeId: string | number) => `challenge-${challengeId}`
 
@@ -43,16 +43,27 @@ export const useRunTests = ({
 
     startTransition(async () => {
       const results = await Promise.all(
-        (testCases || []).map((testCase, i) => compileTypescriptCode(`${code};${testCase.test}`)),
+        (testCases || []).map((testCase, i) =>
+          Promise.all([
+            compileTypescriptCode(`${code};${testCase.test}`),
+            testCase.inferTypeFrom
+              ? inferTypeFromCode(
+                  `${code};\n type ____Result=${testCase.inferTypeFrom}`,
+                  '____Result',
+                )
+              : Promise.resolve(null),
+          ]),
+        ),
       )
       setTestCaseStates((states) => {
         return states.map((state, i) => ({
           ...state,
-          status: results[i].success ? TestCaseStatus.PASSED : TestCaseStatus.FAILED,
+          status: results[i][0].success ? TestCaseStatus.PASSED : TestCaseStatus.FAILED,
+          inferredActualResult: results[i][1],
         }))
       })
 
-      if (results.every((result) => result.success)) {
+      if (results.every((result) => result[0].success)) {
         localStorage.setItem(
           getLocalStorageItemKey(challengeBlock.id!),
           JSON.stringify({ code, allPassed: true }),

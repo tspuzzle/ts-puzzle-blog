@@ -43,6 +43,11 @@ export const challengeBlockFields: Field[] = [
         type: 'textarea',
         required: true,
       },
+      {
+        name: 'inferTypeFrom',
+        type: 'text',
+        label: "Infer type From (for example: If<true, 'a', 'b'>)",
+      },
     ],
   },
 ]

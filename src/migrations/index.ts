@@ -11,6 +11,7 @@ import * as migration_20250728_151727_difficultu_required from './20250728_15172
 import * as migration_20250728_184842_add_role from './20250728_184842_add_role';
 import * as migration_20250729_173958_user_submissions from './20250729_173958_user_submissions';
 import * as migration_20250730_191359_add_post_tags from './20250730_191359_add_post_tags';
+import * as migration_20250801_153115_add_actual_challenge_result from './20250801_153115_add_actual_challenge_result';
 
 export const migrations = [
   {
@@ -76,6 +77,11 @@ export const migrations = [
   {
     up: migration_20250730_191359_add_post_tags.up,
     down: migration_20250730_191359_add_post_tags.down,
-    name: '20250730_191359_add_post_tags'
+    name: '20250730_191359_add_post_tags',
+  },
+  {
+    up: migration_20250801_153115_add_actual_challenge_result.up,
+    down: migration_20250801_153115_add_actual_challenge_result.down,
+    name: '20250801_153115_add_actual_challenge_result'
   },
 ];

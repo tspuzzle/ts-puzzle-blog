@@ -2,6 +2,8 @@ import { cn } from '@/_frontend/shared/lib/cn'
 import { CheckCircle2, CircleDot, XCircle, Loader2 } from 'lucide-react'
 import { TestCase, TestCaseStatus, TestCaseState } from '../model'
 import RichText from '@/_frontend/shared/ui/rich-text'
+import { CodeBlock } from '../../block-code'
+import { createRichTextDataWithCode } from '../lib/createRichTextDataWithCode'
 
 type TestCaseCardProps = TestCase &
   TestCaseState & {
@@ -13,6 +15,7 @@ type TestCaseCardProps = TestCase &
 export function TestCaseCard({
   task,
   expected,
+  inferredActualResult,
   status,
   index,
   isCompact,
@@ -100,6 +103,15 @@ export function TestCaseCard({
             <h4 className="text-xs font-semibold m-0">Expected result:</h4>
             <RichText data={expected} enableGutter={false} />
           </div>
+          {inferredActualResult && (
+            <div className="mt-1">
+              <h4 className="text-xs font-semibold m-0">Actual result</h4>
+              <RichText
+                data={createRichTextDataWithCode(inferredActualResult)}
+                enableGutter={false}
+              />
+            </div>
+          )}
         </div>
       )}
     </div>

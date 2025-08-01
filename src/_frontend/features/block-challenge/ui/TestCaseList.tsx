@@ -20,7 +20,7 @@ export function TestCaseList({
         <TestCaseCard
           key={testCase.id}
           {...testCase}
-          status={testCaseStates[index]?.status || 'not-run'}
+          {...testCaseStates[index]}
           index={index}
           isCompact={isCompact}
           isChecking={isChecking}

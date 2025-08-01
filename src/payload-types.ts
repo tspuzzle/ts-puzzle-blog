@@ -843,6 +843,7 @@ export interface Challenge {
           [k: string]: unknown;
         };
         test: string;
+        inferTypeFrom?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -1451,6 +1452,7 @@ export interface ChallengesSelect<T extends boolean = true> {
         task?: T;
         expected?: T;
         test?: T;
+        inferTypeFrom?: T;
         id?: T;
       };
   slug?: T;
@@ -1972,6 +1974,7 @@ export interface ChallengeBlock {
           [k: string]: unknown;
         };
         test: string;
+        inferTypeFrom?: string | null;
         id?: string | null;
       }[]
     | null;
