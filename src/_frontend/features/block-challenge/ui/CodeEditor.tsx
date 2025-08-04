@@ -11,6 +11,7 @@ interface CodeEditorProps {
   className?: string
 }
 
+const HIDDEN_LINE = '\nexport {};'
 export function CodeEditor({ value, onChange, className }: CodeEditorProps) {
   const { theme } = useTheme()
 
@@ -18,11 +19,17 @@ export function CodeEditor({ value, onChange, className }: CodeEditorProps) {
     (value.split('\n').length - 1) * LINE_MULTIPLIER || LINE_MULTIPLIER,
   )
 
+  const content = (value || '').concat(HIDDEN_LINE)
+
+  const lines = content.split('\n').length
+  console.log(lines)
+  //'export {}; \n'.concat((value || '').replace('export {}; \n', ''))
+
   return (
-    <div className="bg-grey-50 text-code flex-1 bg-white dark:bg-[rgb(30,30,30)] overflow-y-scroll">
+    <div className="bg-grey-50 text-code flex-1 bg-white dark:bg-[rgb(30,30,30)]">
       <Editor
         //height={height}
-        value={value}
+        value={content}
         language={'typescript'}
         theme={theme === 'dark' ? 'vs-dark' : 'vs-light'}
         options={{
@@ -39,7 +46,7 @@ export function CodeEditor({ value, onChange, className }: CodeEditorProps) {
           },
         }}
         onChange={(val) => {
-          onChange(val || '')
+          onChange((val || '').replace(HIDDEN_LINE, ''))
         }}
         onMount={(editor, monaco) => {
           // https://microsoft.github.io/monaco-editor/playground.html?source=v0.52.0#example-customizing-the-appearence-exposed-colors
@@ -59,6 +66,12 @@ export function CodeEditor({ value, onChange, className }: CodeEditorProps) {
             ...defaultCompilerOptions,
             noImplicitAny: true,
           })
+
+          if (editor && monaco) {
+            // hide the first line that contain "export {};"
+            const _editor = editor as any
+            _editor.setHiddenAreas([new monaco.Range(lines, 1, lines, 1)])
+          }
 
           if (editor) {
             editor.onDidChangeModelContent(() => {

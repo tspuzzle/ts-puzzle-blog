@@ -45,7 +45,7 @@ export const useRunTests = ({
       const results = await Promise.all(
         (testCases || []).map((testCase, i) =>
           Promise.all([
-            compileTypescriptCode(`${code};${testCase.test}`),
+            compileTypescriptCode(`${code};\n${testCase.test}`),
             testCase.inferTypeFrom
               ? inferTypeFromCode(
                   `${code};\n type ____Result=${testCase.inferTypeFrom}`,
