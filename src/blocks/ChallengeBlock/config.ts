@@ -19,7 +19,7 @@ export const challengeBlockFields: Field[] = [
   },
   {
     name: 'initialCode',
-    type: 'text',
+    type: 'textarea',
   },
   {
     name: 'testCases',
